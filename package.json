@@ -1,0 +1,30 @@
+{
+  "name": "thrust",
+  "version": "1.0.0",
+  "description": "Thruuuuuust",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "babel --watch src -d dist"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ubermuda/thrust.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ubermuda/thrust/issues"
+  },
+  "homepage": "https://github.com/ubermuda/thrust#readme",
+  "dependencies": {
+    "pixi.js": "^3.0.11"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.10.1",
+    "babel-preset-es2015": "^6.9.0"
+  },
+  "babel": {
+    "presets": ["es2015"]
+  }
+}
