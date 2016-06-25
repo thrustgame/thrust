@@ -1,32 +1,44 @@
+import Room from './Room.js';
+import Wall from './Wall.js';
+
 class Corridor {
-    constructor(rooms) {
-        this.rooms = rooms;
+    constructor(distance, length = 40) {
+        this.distance = distance;
+        this.rooms = new Array(length);
+
+        const size = distance / length;
+        let start = 0;
+        let end = 0;
+
+        for (let i = 0; i < length; i++) {
+            start = end;
+            end = start + size;
+            this.rooms[i] = new Room(i, start, end);
+        }
     }
 
-    filter(start, end) {
-        let matches = [];
+    getWalls() {
+        const length = this.rooms.length;
+        const walls = new Array(length-1);
 
-        for (var i = 0; i < this.rooms.length; i++) {
+        for (let i = walls.length - 1; i >= 0; i--) {
             let room = this.rooms[i];
-
-            if (room.start < end && room.end > start) {
-                matches.push(room);
-            }
+            walls[i] = new Wall(room.end);
         }
 
-        return matches;
+        return walls;
     }
 
-    getWall(position) {
-        for (var i = 0; i < this.rooms.length; i++) {
-            let room = this.rooms[i];
+    getInverseWalls() {
+        const length = this.rooms.length;
+        const walls = new Array(length-1);
 
-            if (room.wall < position && room.end > position) {
-                return true;
-            }
+        for (let i = walls.length - 1; i >= 0; i--) {
+            let room = this.rooms[length-1 - i];
+            walls[i] = new Wall(this.distance - room.start);
         }
 
-        return false;
+        return walls;
     }
 }
 

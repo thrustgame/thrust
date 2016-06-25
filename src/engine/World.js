@@ -1,5 +1,5 @@
 import Corridor from './Corridor.js';
-import Room from './Room.js';
+import Track from './Track.js';
 
 /**
  * World simulation
@@ -16,30 +16,12 @@ class World {
         this.distance = distance;
         this.players = players;
         this.onEnd = onEnd;
-        this.rooms = World.createRooms(distance);
-    }
 
-    /**
-     * Creat a corridor full of rooms
-     *
-     * @param {Number} distance
-     * @param {Number} length
-     *
-     * @return {Corridor}
-     */
-    static createRooms(distance, length = 40) {
-        const rooms = [];
-        const size = distance / length;
-        let start = 0;
-        let end = 0;
-
-        for (var i = 0; i < length; i++) {
-            start = end;
-            end = start + size;
-            rooms.push(new Room(i, start, end));
-        }
-
-        return new Corridor(rooms);
+        this.rooms = new Corridor(distance);
+        this.tracks = [
+            new Track(players[0], this.rooms.getWalls()),
+            new Track(players[1], this.rooms.getInverseWalls()),
+        ];
     }
 
     /**
@@ -51,24 +33,28 @@ class World {
         let distance = 0;
 
         for (var i = this.players.length - 1; i >= 0; i--) {
-            let player = this.players[i];
-
-            distance += player.update(delta);
-
-            let wall = this.rooms.getWall(player.position);
-
-            if (wall) {
-                if (player.thrusting) {
-                    player.increaseSpeed();
-                } else {
-                    player.resetSpeed();
-                }
-            }
+            distance += this.updatePlayer(this.players[i], delta);
         }
 
         if (distance >= this.distance) {
             this.onEnd();
         }
+    }
+
+    updatePlayer(player, delta) {
+        const previous = player.position;
+        const position = player.update(delta);
+        const wall = player.track.getWall(position);
+
+        if (wall) {
+            if (player.thrusting) {
+                player.increaseSpeed();
+            } else {
+                player.resetSpeed();
+            }
+        }
+
+        return position;
     }
 }
 
