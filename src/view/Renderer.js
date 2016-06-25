@@ -11,11 +11,21 @@ class Renderer {
         const width = window.innerWidth;
         const height = window.innerHeight;
 
-        this.renderer = new PIXI.autoDetectRenderer(width, height);
+        this.renderer = new PIXI.autoDetectRenderer(width, height, {
+            clearBeforeRender: false,
+            roundPixels: true,
+        });
 
-        console.log(this.renderer);
+        console.log(this.renderer.view);
+
+    //this.context.globalCompositeOperation = 'copy';
+    //this.context.imageSmoothingEnabled = false;
+    //this.renderer.view
 
         document.body.appendChild(this.renderer.view);
+
+        this.renderer.view.width = width;
+        this.renderer.view.height = height;
 
         this.world = world;
 

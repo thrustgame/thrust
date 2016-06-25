@@ -53,11 +53,13 @@ class Camera {
      */
     drawRoom(start, end, room) {
         const x = (room.start - start) * this.scale;
-        const width = Math.min(room.size * this.scale, this.screen.width - x);
+        const width = Math.min(room.size * this.scale, this.screen.width);
+        const height = this.screen.halfHeight;
 
         this.graphic.lineStyle(0);
         this.graphic.beginFill(room.color, 1);
-        this.graphic.drawRect(x, this.top, width, this.screen.halfHeight);
+        this.graphic.drawRect(x, this.top, width, height);
+        this.graphic.endFill();
     }
 }
 

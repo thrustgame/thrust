@@ -26,12 +26,18 @@ class Thrust {
      * On frame
      */
     onFrame() {
+        //console.time('frame');
         this.frame = requestAnimationFrame(this.onFrame);
 
         const delta = this.clock.getDelta();
 
+        //console.time('update');
         this.world.update(delta);
+        //console.timeEnd('update');
+        //console.time('draw');
         this.renderer.draw();
+        //console.timeEnd('draw');
+        //console.timeEnd('frame');
     }
 
     onEnd() {
