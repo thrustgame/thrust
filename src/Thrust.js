@@ -27,9 +27,7 @@ class Thrust {
     }
 
     reset() {
-        this.players[0].reset();
-        this.players[1].reset();
-        this.world.reset();
+        window.location.reload();
     }
 
     start() {

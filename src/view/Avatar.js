@@ -2,11 +2,11 @@ import Canvas from '../tool/Canvas.js';
 
 class Avatar {
 
-    static radius = 50;
+    static radius = 100;
 
     constructor(player, direction) {
         this.player = player;
-        this.idle = Avatar.createLozange('#FCB603', '#D19703', direction);
+        this.idle = Avatar.createLozange('#FFFD1B', '#BCBB14', direction);
         this.thrust = Avatar.createLozange('#F5DF0E', '#AB9B0A', direction);
     }
 
