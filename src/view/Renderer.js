@@ -52,10 +52,10 @@ class Renderer {
         const margin = this.canvas.element.height / 4;
         const radius = this.avatars[0].radius;
 
-        this.canvas.drawImageTo(this.avatars[0].draw(), this.canvas.element.width / 2 - radius, margin - radius);
-        this.canvas.drawImageTo(this.avatars[1].draw(), this.canvas.element.width / 2 - radius, (margin * 3) - radius);
+        this.canvas.drawImageTo(this.avatars[0].draw(), this.canvas.element.width / 2, margin - radius);
+        this.canvas.drawImageTo(this.avatars[1].draw(), this.canvas.element.width / 2 - radius*2, (margin * 3) - radius);
 
-        this.minimap.draw(this.canvas, [this.world.players[0].position, this.world.players[1].position]);
+        this.minimap.draw(this.canvas, this.avatars);
     }
 }
 

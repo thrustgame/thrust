@@ -48,6 +48,12 @@ class Canvas {
         this.context.fillRect(x, y, width, height);
     }
 
+    reverse() {
+        this.context.save();
+        this.context.translate(this.element.width, 0);
+        this.context.scale(-1, 1);
+    };
+
     /**
      * To string
      *

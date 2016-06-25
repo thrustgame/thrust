@@ -1,17 +1,10 @@
 class Wall {
-    constructor(position, thickness = 0.01) {
+    constructor(position) {
         this.position = position;
-        this.zone = position - thickness;
-        this.done = false;
     }
 
     match(position) {
-        return this.position >= position
-            && this.zone <= position;
-    }
-
-    pass() {
-        this.done = true;
+        return this.position <= position;
     }
 }
 

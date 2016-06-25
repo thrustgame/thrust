@@ -1,17 +1,22 @@
 class Track {
     constructor(player, walls) {
+        this.player = player;
         this.walls = walls;
         this.index = 0;
         player.track = this;
     }
 
     getWall(position) {
-        for (let i = this.walls.length - 1; i >= 0; i--) {
-            let wall = this.walls[i];
+        if (!this.walls.length) {
+            return null;
+        }
 
-            if (wall.match(position)) {
-                return wall;
-            }
+        const wall = this.walls[0];
+
+        if (wall.match(position)) {
+            this.walls.splice(0, 1);
+
+            return wall;
         }
 
         return null;

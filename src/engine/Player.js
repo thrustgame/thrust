@@ -1,5 +1,7 @@
 import PlayerController from './PlayerController'
 
+const speed = 0.2;
+
 class Player
 {
     constructor(key) {
@@ -7,7 +9,7 @@ class Player
         this.endThrust = this.endThrust.bind(this);
 
         this.position = 0;
-        this.speed = 0.1;
+        this.speed = speed;
         this.thrusting = false;
 
         this.contoller = new PlayerController(this, key);
@@ -24,11 +26,11 @@ class Player
     }
 
     increaseSpeed() {
-        this.speed += 0.01;
+        this.speed += speed/5;
     }
 
     resetSpeed() {
-        this.speed = 0.1;
+        this.speed = speed;
     }
 
     update(delta) {

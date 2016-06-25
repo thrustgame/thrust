@@ -5,28 +5,30 @@ class Avatar {
         this.player = player;
         this.radius = 50;
 
-        this.idle = Avatar.createTriangle(50, '#FFFB52', direction);
-        this.thrust = Avatar.createTriangle(50, '#BCBA3C', direction);
+        this.idle = Avatar.createLozange('#FFFB52', direction);
+        this.thrust = Avatar.createLozange('#BCBA3C', direction);
     }
 
-    static createTriangle(radius, color, direction) {
-        const canvas = new Canvas(radius * 2, radius * 2);
+    static createLozange(color, direction) {
+        const canvas = new Canvas(100, 100);
         const context = canvas.element.getContext('2d');
 
         canvas.setFill(color);
         context.beginPath();
 
         if (direction == 'rtl') {
-            context.moveTo(25,50);
-            context.lineTo(100,75);
-            context.lineTo(100,25);
-        } else {
-            context.moveTo(75,50);
-            context.lineTo(0,75);
-            context.lineTo(0,25);
+            canvas.reverse();
         }
 
+        context.moveTo(25,50);
+        context.lineTo(75,75);
+        context.lineTo(100,50);
+        context.lineTo(75,25);
         context.fill();
+
+        if (direction == 'rtl') {
+            canvas.reverse();
+        }
 
         return canvas.element;
     }
