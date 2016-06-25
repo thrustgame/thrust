@@ -4,8 +4,8 @@ class Avatar {
     constructor(player, direction) {
         this.player = player;
         this.radius = 50;
-        this.idle = Avatar.createTriangle(50, 'white', direction);
-        this.thrust = Avatar.createTriangle(50, 'black', direction);
+        this.idle = Avatar.createTriangle(50, '#FFFB52', direction);
+        this.thrust = Avatar.createTriangle(50, '#BCBA3C', direction);
     }
 
     static createTriangle(radius, color, direction) {
