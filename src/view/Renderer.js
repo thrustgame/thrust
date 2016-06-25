@@ -22,10 +22,12 @@ class Renderer {
 
         document.body.appendChild(this.canvas.element);
 
-        this.map = new Map(this.world.rooms, this.world.distance, this.scale, height/2);
+        const halfHeight = Math.ceil(height / 2);
+
+        this.map = new Map(this.world.rooms, this.world.distance, this.scale, halfHeight);
         this.cameras = [
             new Camera(0, 0, this.world.players[0]),
-            new Camera(0, this.canvas.element.height / 2, this.world.players[1]),
+            new Camera(0, halfHeight, this.world.players[1]),
         ];
         this.minimap = new Minimap(this.world.distance, width, height);
     }
@@ -36,8 +38,8 @@ class Renderer {
     draw() {
         this.canvas.clear();
 
-        this.cameras[0].x = -this.map.canvas.element.width + this.canvas.element.width + (this.world.players[0].position * this.scale);
-        this.cameras[1].x = -this.world.players[1].position * this.scale;
+        this.cameras[0].x = -this.map.canvas.element.width + this.canvas.element.width + (this.cameras[0].player.position * this.scale);
+        this.cameras[1].x = -this.cameras[1].player.position * this.scale;
 
         this.canvas.drawImageTo(this.map.canvas.element, this.cameras[0].x, this.cameras[0].y);
         this.canvas.drawImageTo(this.map.canvas.element, this.cameras[1].x, this.cameras[1].y);
