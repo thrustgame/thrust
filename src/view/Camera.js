@@ -29,13 +29,18 @@ class Camera {
      * @param {Number} position
      */
     draw(position) {
-        const start = (position - this.halfWidth);
-        const end = (position + this.halfWidth);
+        const start = position - this.halfWidth;
+        const end = position + this.halfWidth;
         const rooms = this.rooms.filter(start, end);
 
+        let debug = '';
+
         for (var i = rooms.length - 1; i >= 0; i--) {
+            debug += rooms[i].id + ' ';
             this.drawRoom(start, end, rooms[i]);
         }
+
+        // console.log(start, end, debug);
     }
 
     /**

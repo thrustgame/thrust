@@ -36,7 +36,7 @@ class World {
         for (var i = 0; i < length; i++) {
             start = end;
             end = start + size;
-            rooms.push(new Room(start, end));
+            rooms.push(new Room(i, start, end));
         }
 
         return new Corridor(rooms);
