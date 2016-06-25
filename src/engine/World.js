@@ -12,16 +12,21 @@ class World {
      * @param {Array} players
      * @param {Function} onEnd
      */
-    constructor(distance, players, onEnd) {
-        this.distance = distance;
+    constructor(players, onEnd) {
+        this.rooms = new Corridor();
         this.players = players;
         this.onEnd = onEnd;
 
-        this.rooms = new Corridor(distance);
+        console.log(this.rooms);
+
         this.tracks = [
             new Track(players[0], this.rooms.getWalls()),
             new Track(players[1], this.rooms.getInverseWalls()),
         ];
+    }
+
+    getDistance() {
+        return this.rooms.distance;
     }
 
     /**
@@ -36,7 +41,7 @@ class World {
             distance += this.updatePlayer(this.players[i], delta);
         }
 
-        if (distance >= this.distance) {
+        if (distance >= this.getDistance()) {
             this.onEnd();
         }
     }

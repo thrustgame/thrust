@@ -16,14 +16,14 @@ class Renderer {
 
         this.world = world;
         this.canvas = new Canvas(width, height, document.getElementById('canvas'));
-        this.fov = this.world.distance / 20;
+        this.fov = this.world.getDistance() / 20;
         this.scale = width / this.fov;
 
         this.canvas.context.imageSmoothingEnabled = false;
 
         const halfHeight = Math.ceil(height / 2);
 
-        this.map = new Map(this.world.rooms, this.world.distance, this.scale, halfHeight);
+        this.map = new Map(this.world.rooms, this.world.getDistance(), this.scale, halfHeight);
         this.cameras = [
             new Camera(0, 0, this.world.players[0]),
             new Camera(0, halfHeight, this.world.players[1]),
@@ -34,7 +34,7 @@ class Renderer {
             new Avatar(this.world.players[1], 'ltr')
         ];
 
-        this.minimap = new Minimap(this.world.distance, width, height);
+        this.minimap = new Minimap(this.world.getDistance(), width, height);
     }
 
     /**

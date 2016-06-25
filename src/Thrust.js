@@ -18,7 +18,7 @@ class Thrust {
         this.frame = null;
         this.clock = new Clock();
         this.players = [new Player(65), new Player(76)];
-        this.world = new World(10, this.players, this.onEnd);
+        this.world = new World(this.players, this.onEnd);
         this.renderer = new Renderer(this.world);
 
         this.title = new Title(this);
