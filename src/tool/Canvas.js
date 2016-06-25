@@ -34,6 +34,10 @@ class Canvas {
         this.context.drawImage(image, x, y, width, height);
     }
 
+    drawImageTo(image, x, y) {
+        this.context.drawImage(image, x, y);
+    }
+
     drawCircle(x, y, radius) {
         this.context.beginPath();
         this.context.arc(x, y, radius, 0, Math.PI * 2, false);
