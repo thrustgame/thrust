@@ -8,7 +8,7 @@ class Player {
         this.thrust = this.thrust.bind(this);
         this.endThrust = this.endThrust.bind(this);
 
-        this.position = 0;
+        this.position = Player.speed;
         this.speed = Player.speed;
         this.thrusting = false;
 
@@ -16,7 +16,7 @@ class Player {
     }
 
     reset() {
-        this.position = 0;
+        this.position = Player.speed;
         this.speed = Player.speed;
         this.thrusting = false;
     }

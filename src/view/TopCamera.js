@@ -3,9 +3,9 @@ import Avatar from './Avatar.js';
 import Player from '../engine/Player.js';
 
 class TopCamera extends Camera {
-    getPosition() {
+    getX() {
         const screenWidth = this.canvas.element.width;
-        const screenHalfWidth = screenWidth / 2;
+        const screenHalfWidth = screenWidth / 4;
         const mapWidth = this.map.width;
 
         return Math.round(-screenHalfWidth - mapWidth + screenWidth + this.getPlayerPosition());
@@ -13,7 +13,7 @@ class TopCamera extends Camera {
 
     updateAvatar() {
         const margin = this.canvas.element.height / 4;
-        const screenHalfWidth = this.canvas.element.width / 2;
+        const screenHalfWidth = this.canvas.element.width * 3 / 4;
         const avatar = {};
 
         avatar.size = Avatar.radius * this.avatar.player.speed / Player.speed;

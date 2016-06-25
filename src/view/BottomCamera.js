@@ -3,15 +3,15 @@ import Avatar from './Avatar.js';
 import Player from '../engine/Player.js';
 
 class BottomCamera extends Camera {
-    getPosition() {
-        const screenHalfWidth = this.canvas.element.width / 2;
+    getX() {
+        const screenHalfWidth = this.canvas.element.width / 4;
 
         return Math.round(screenHalfWidth - this.getPlayerPosition());
     }
 
     updateAvatar() {
         const margin = this.canvas.element.height * 3 / 4;
-        const screenHalfWidth = this.canvas.element.width / 2;
+        const screenHalfWidth = this.canvas.element.width / 4;
         const x = this.canvas.element.width / 2;
         const avatar = {};
 

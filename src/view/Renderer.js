@@ -38,23 +38,6 @@ class Renderer {
         this.canvas.clear();
         this.cameras[0].draw();
         this.cameras[1].draw();
-
-        //this.canvas.drawImage(this.map.canvas.element, this.cameras[0].x, this.cameras[0].y, mapWidth, screenHalfHeight);
-        //this.canvas.drawImage(this.map.canvas.element, this.cameras[1].x, this.cameras[1].y, mapWidth, screenHalfHeight);
-
-        /*const screenHalfWidth = this.canvas.element.width / 2;
-        const margin = this.canvas.element.height / 4;
-        const avatar1 = {};
-        const avatar2 = {};
-
-        avatar1.size = Avatar.radius * (this.avatars[0].player.speed / Player.speed);
-        avatar1.x = Math.round(screenHalfWidth);
-        avatar1.y = Math.round(margin - avatar1.size/2);
-
-        avatar2.size = Avatar.radius * (this.avatars[1].player.speed / Player.speed);
-        avatar2.x = Math.round(screenHalfWidth - avatar2.size);
-        avatar2.y = Math.round(margin * 3 - avatar2.size/2);*/
-
         this.minimap.draw(this.canvas, [
             this.cameras[0].avatar,
             this.cameras[1].avatar,

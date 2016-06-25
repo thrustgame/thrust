@@ -15,10 +15,9 @@ class Camera {
     }
 
     draw() {
-
         this.canvas.drawImage(
             this.map,
-            this.getPosition(),
+            this.getX(),
             this.y,
             this.map.width,
             this.canvas.element.height / 2
