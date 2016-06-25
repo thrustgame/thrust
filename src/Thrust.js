@@ -1,6 +1,7 @@
 import Clock from './tool/Clock.js';
 import World from './engine/World.js';
 import Player from './engine/Player.js';
+import Renderer from './view/Renderer.js';
 
 class Thrust {
     /**
@@ -16,13 +17,7 @@ class Thrust {
         this.clock = new Clock();
         this.players = [new Player(), new Player()];
         this.world = new World(10, this.players, this.onEnd);
-        this.stage = new PIXI.Container();
-        this.renderer = new PIXI.autoDetectRenderer(
-            window.innerWidth,
-            window.innerHeight
-        );
-
-        document.body.appendChild(this.renderer.view);
+        this.renderer = new Renderer(this.world);
 
         this.onFrame();
     }
@@ -36,7 +31,7 @@ class Thrust {
         const delta = this.clock.getDelta();
 
         this.world.update(delta);
-        this.renderer.render(this.stage);
+        this.renderer.draw();
     }
 
     onEnd() {
