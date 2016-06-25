@@ -21,8 +21,8 @@ class Minimap {
         this.scale = width / distance;
         this.canvas = new Canvas(width, radius * 2);
         this.circles = [
-            this.getCircle('#FF0000'),
-            this.getCircle('#00FF00'),
+            this.getCircle('#FFFB52'),
+            this.getCircle('#FFFB52'),
         ];
     }
 
@@ -47,7 +47,7 @@ class Minimap {
         const x = (ltr ? position : this.distance - position) * this.scale;
         const color = ltr ? 0xFF00000 : 0x00FF00;
 
-        canvas.drawImage(circle, x, this.halfHeight, radius * 2, radius * 2);
+        canvas.drawImage(circle, x - radius, this.halfHeight, radius * 2, radius * 2);
     }
 
     /**

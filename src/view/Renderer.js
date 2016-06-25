@@ -15,13 +15,11 @@ class Renderer {
         const height = window.innerHeight;
 
         this.world = world;
-        this.canvas = new Canvas(width, height);
+        this.canvas = new Canvas(width, height, document.getElementById('canvas'));
         this.fov = this.world.distance / 20;
         this.scale = width / this.fov;
 
         this.canvas.context.imageSmoothingEnabled = false;
-
-        document.body.appendChild(this.canvas.element);
 
         const halfHeight = Math.ceil(height / 2);
 
