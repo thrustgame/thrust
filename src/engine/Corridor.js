@@ -4,7 +4,7 @@ class Corridor {
     }
 
     filter(start, end) {
-
+        return this.rooms;
     }
 }
 

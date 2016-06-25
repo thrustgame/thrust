@@ -19,8 +19,8 @@ class Renderer {
         this.scale = width / this.world.distance;
 
         this.stage = new PIXI.Container();
-        this.minimap = new Minimap(this.world.distance, height, this.scale, this.stage);
         this.camera = new Camera(this.world.rooms, this.world.distance / 20, width, height, this.scale, this.stage);
+        this.minimap = new Minimap(this.world.distance, height, this.scale, this.stage);
     }
 
     /**
