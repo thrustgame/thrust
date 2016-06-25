@@ -1,6 +1,7 @@
 import Minimap from './Minimap.js';
 import Camera from './Camera.js';
 import Map from './Map.js';
+import Avatar from './Avatar.js';
 import Canvas from '../tool/Canvas.js';
 
 class Renderer {
@@ -29,6 +30,12 @@ class Renderer {
             new Camera(0, 0, this.world.players[0]),
             new Camera(0, halfHeight, this.world.players[1]),
         ];
+
+        this.avatars = [
+            new Avatar(this.world.players[0]),
+            new Avatar(this.world.players[1])
+        ];
+
         this.minimap = new Minimap(this.world.distance, width, height);
     }
 
@@ -43,6 +50,12 @@ class Renderer {
 
         this.canvas.drawImageTo(this.map.canvas.element, this.cameras[0].x, this.cameras[0].y);
         this.canvas.drawImageTo(this.map.canvas.element, this.cameras[1].x, this.cameras[1].y);
+
+        const margin = this.canvas.element.height / 4;
+        const radius = this.avatars[0].radius;
+
+        this.canvas.drawImageTo(this.avatars[0].canvas.element, (this.canvas.element.width - margin) - radius, margin - radius);
+        this.canvas.drawImageTo(this.avatars[1].canvas.element, margin - radius, (margin * 3) - radius);
 
         this.minimap.draw(this.canvas, [this.world.players[0].position, this.world.players[1].position]);
     }

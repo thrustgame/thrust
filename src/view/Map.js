@@ -6,8 +6,6 @@ class Map {
         this.scale = scale;
         this.canvas = new Canvas(distance * scale, height);
 
-        console.log(this.corridor);
-
         for (var i = this.corridor.rooms.length - 1; i >= 0; i--) {
             this.drawRoom(this.corridor.rooms[i]);
         }

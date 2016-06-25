@@ -4,7 +4,7 @@ class Player
 {
     constructor(key) {
         this.position = 0;
-        this.speed = 1;
+        this.speed = 0.1;
         this.thrusting = false;
 
         this.contoller = new PlayerController(this, key)

@@ -4,7 +4,7 @@ class Room {
         this.start = start;
         this.end = end;
         this.size = this.end - this.start;
-        this.color = this.start % 2 === 0 ? '#FF700B' : '#9354cc';
+        this.color = this.id % 2 === 0 ? '#FF700B' : '#9354cc';
     }
 }
 

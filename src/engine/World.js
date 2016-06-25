@@ -27,9 +27,9 @@ class World {
      *
      * @return {Corridor}
      */
-    static createRooms(distance, length = 10) {
+    static createRooms(distance, length = 40) {
         const rooms = [];
-        const size = Math.ceil(distance / length);
+        const size = distance / length;
         let start = 0;
         let end = 0;
 
