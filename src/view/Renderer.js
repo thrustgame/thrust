@@ -1,8 +1,8 @@
 import Minimap from './Minimap.js';
-import Camera from './Camera.js';
+import TopCamera from './TopCamera.js';
+import BottomCamera from './BottomCamera.js';
 import Map from './Map.js';
 import Player from '../engine/Player.js';
-import Avatar from './Avatar.js';
 import Canvas from '../tool/Canvas.js';
 
 class Renderer {
@@ -23,10 +23,9 @@ class Renderer {
         const halfHeight = Math.ceil(height / 2);
 
         this.map = new Map(this.world.rooms, this.world.getDistance(), this.scale, halfHeight);
-        this.cameras = [new Camera(0, 0), new Camera(0, halfHeight)];
-        this.avatars = [
-            new Avatar(this.world.players[0], 'rtl'),
-            new Avatar(this.world.players[1], 'ltr')
+        this.cameras = [
+            new TopCamera(this.canvas, this.map.canvas.element, this.world.players[0], this.scale, 0),
+            new BottomCamera(this.canvas, this.map.canvas.element, this.world.players[1], this.scale, halfHeight)
         ];
 
         this.minimap = new Minimap(this.world.getDistance(), width, height);
@@ -37,21 +36,13 @@ class Renderer {
      */
     draw() {
         this.canvas.clear();
+        this.cameras[0].draw();
+        this.cameras[1].draw();
 
-        const screenWidth = this.canvas.element.width;
-        const screenHeight = this.canvas.element.height;
-        const screenHalfWidth = screenWidth / 2;
-        const screenHalfHeight = screenHeight / 2;
-        const mapWidth = this.map.canvas.element.width;
-        const player1 = this.world.players[0].position * this.scale;
-        const player2 = this.world.players[1].position * this.scale;
+        //this.canvas.drawImage(this.map.canvas.element, this.cameras[0].x, this.cameras[0].y, mapWidth, screenHalfHeight);
+        //this.canvas.drawImage(this.map.canvas.element, this.cameras[1].x, this.cameras[1].y, mapWidth, screenHalfHeight);
 
-        this.cameras[0].x = Math.round(-screenHalfWidth - mapWidth + screenWidth + player1);
-        this.cameras[1].x = Math.round(screenHalfWidth - player2);
-
-        this.canvas.drawImage(this.map.canvas.element, this.cameras[0].x, this.cameras[0].y, mapWidth, screenHalfHeight);
-        this.canvas.drawImage(this.map.canvas.element, this.cameras[1].x, this.cameras[1].y, mapWidth, screenHalfHeight);
-
+        /*const screenHalfWidth = this.canvas.element.width / 2;
         const margin = this.canvas.element.height / 4;
         const avatar1 = {};
         const avatar2 = {};
@@ -62,11 +53,12 @@ class Renderer {
 
         avatar2.size = Avatar.radius * (this.avatars[1].player.speed / Player.speed);
         avatar2.x = Math.round(screenHalfWidth - avatar2.size);
-        avatar2.y = Math.round(margin * 3 - avatar2.size/2);
+        avatar2.y = Math.round(margin * 3 - avatar2.size/2);*/
 
-        this.canvas.drawImage(this.avatars[0].draw(), avatar1.x, avatar1.y, avatar1.size, avatar1.size);
-        this.canvas.drawImage(this.avatars[1].draw(), avatar2.x, avatar2.y, avatar2.size, avatar2.size);
-        this.minimap.draw(this.canvas, this.avatars);
+        this.minimap.draw(this.canvas, [
+            this.cameras[0].avatar,
+            this.cameras[1].avatar,
+        ]);
     }
 }
 

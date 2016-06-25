@@ -1,4 +1,4 @@
-import Canvas from '../tool/Canvas.js'
+import Canvas from '../tool/Canvas.js';
 
 class Avatar {
 
@@ -6,7 +6,6 @@ class Avatar {
 
     constructor(player, direction) {
         this.player = player;
-
         this.idle = Avatar.createLozange('#FCB603', '#D19703', direction);
         this.thrust = Avatar.createLozange('#F5DF0E', '#AB9B0A', direction);
     }
@@ -16,7 +15,7 @@ class Avatar {
         const canvas = new Canvas(size, size);
         const context = canvas.context;
 
-        if (direction == 'rtl') {
+        if (direction) {
             canvas.reverse();
         }
 
@@ -34,7 +33,7 @@ class Avatar {
         context.lineTo(1 * size, 0.5 * size);
         context.fill();
 
-        if (direction == 'rtl') {
+        if (direction) {
             canvas.reverse();
         }
 
