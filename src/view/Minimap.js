@@ -1,6 +1,14 @@
+/**
+ * Minimap view
+ */
 class Minimap {
     /**
      * Constructor
+     *
+     * @param {Number} distance
+     * @param {Number} height
+     * @param {Number} scale
+     * @param {Number} stage
      */
     constructor(distance, height, scale, stage) {
         this.distance = distance;
@@ -13,6 +21,13 @@ class Minimap {
         stage.addChild(this.graphics[1]);
     }
 
+    /**
+     * Draw a player on the minimap
+     *
+     * @param {Graphic} graphic
+     * @param {Number} position
+     * @param {String} direction
+     */
     drawPlayer(graphic, position, direction) {
 
         const ltr = (direction == 'right');
@@ -27,6 +42,11 @@ class Minimap {
         graphic.endFill();
     }
 
+    /**
+     * Draw players on the minimap
+     *
+     * @param {Array} positions
+     */
     draw(positions) {
         this.drawPlayer(this.graphics[0], positions[0], 'right');
         this.drawPlayer(this.graphics[1], positions[1], 'left');

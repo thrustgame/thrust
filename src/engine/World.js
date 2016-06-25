@@ -1,8 +1,17 @@
 import Corridor from './Corridor.js';
 import Room from './Room.js';
 
-class World
-{
+/**
+ * World simulation
+ */
+class World {
+    /**
+     * Constructor
+     *
+     * @param {Number} distance
+     * @param {Array} players
+     * @param {Function} onEnd
+     */
     constructor(distance, players, onEnd) {
         this.distance = distance;
         this.players = players;
@@ -10,6 +19,14 @@ class World
         this.rooms = World.createRooms(distance);
     }
 
+    /**
+     * Creat a corridor full of rooms
+     *
+     * @param {Number} distance
+     * @param {Number} length
+     *
+     * @return {Corridor}
+     */
     static createRooms(distance, length = 10) {
         const rooms = [];
         const size = Math.ceil(distance / length);
@@ -25,6 +42,11 @@ class World
         return new Corridor(rooms);
     }
 
+    /**
+     * Update
+     *
+     * @param {Number} delta
+     */
     update(delta) {
         let distance = 0;
 
