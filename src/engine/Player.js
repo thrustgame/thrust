@@ -12,7 +12,13 @@ class Player
         this.speed = speed;
         this.thrusting = false;
 
-        this.contoller = new PlayerController(this, key);
+        this.controller = new PlayerController(this, key);
+    }
+
+    reset() {
+        this.position = 0;
+        this.speed = speed;
+        this.thrusting = false;
     }
 
     thrust() {
