@@ -1,4 +1,5 @@
 import Minimap from './Minimap.js';
+import Camera from './Camera.js';
 
 class Renderer {
     constructor(world) {
@@ -14,9 +15,11 @@ class Renderer {
 
         this.stage = new PIXI.Container();
         this.minimap = new Minimap(this.world.distance, height, this.scale, this.stage);
+        this.camera = new Camera(this.world.rooms, this.world.distance / 20, width, height, this.scale, this.stage);
     }
 
     draw() {
+        this.camera.draw(this.world.players[0].position);
         this.minimap.draw([this.world.players[0].position, this.world.players[1].position]);
         this.renderer.render(this.stage);
     }
