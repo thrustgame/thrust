@@ -1,36 +1,40 @@
 import PlayerController from './PlayerController'
 
-const speed = 200;
+class Player {
 
-class Player
-{
+    static speed = 300;
+
     constructor(key) {
         this.thrust = this.thrust.bind(this);
         this.endThrust = this.endThrust.bind(this);
 
         this.position = 0;
-        this.speed = speed;
+        this.speed = Player.speed;
         this.thrusting = false;
 
-        this.contoller = new PlayerController(this, key);
+        this.controller = new PlayerController(this, key);
+    }
+
+    reset() {
+        this.position = 0;
+        this.speed = Player.speed;
+        this.thrusting = false;
     }
 
     thrust() {
-        console.log('THRUUUUUUST');
         this.thrusting = true;
     }
 
     endThrust() {
-        console.log('End thrust.');
         this.thrusting = false;
     }
 
     increaseSpeed() {
-        this.speed += speed/5;
+        this.speed += Player.speed / 5;
     }
 
     resetSpeed() {
-        this.speed = speed;
+        this.speed = Player.speed;
     }
 
     update(delta) {

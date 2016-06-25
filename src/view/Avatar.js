@@ -1,16 +1,18 @@
 import Canvas from '../tool/Canvas.js'
 
 class Avatar {
+
+    static radius = 50;
+
     constructor(player, direction) {
         this.player = player;
-        this.radius = 50;
 
-        this.idle = Avatar.createLozange(this.radius, '#FFFB52', '#e2df48', direction);
-        this.thrust = Avatar.createLozange(this.radius, '#fffa1c', '#eae61b', direction);
+        this.idle = Avatar.createLozange('#FCB603', '#D19703', direction);
+        this.thrust = Avatar.createLozange('#F5DF0E', '#AB9B0A', direction);
     }
 
-    static createLozange(radius, color, colorDark, direction) {
-        const size = radius * 2;
+    static createLozange(color, colorDark, direction) {
+        const size = Avatar.radius * 2;
         const canvas = new Canvas(size, size);
         const context = canvas.context;
 

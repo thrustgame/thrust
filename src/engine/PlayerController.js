@@ -7,8 +7,8 @@ class PlayerController {
         this.endThrust = this.endThrust.bind(this);
         this.endCooldown = this.endCooldown.bind(this);
 
-        this.timeout = 300;
-        this.cooldown = 300;
+        this.timeout = 500;
+        this.cooldown = 0;
         this.listening = true;
 
         document.body.addEventListener('keydown', this.onKeyDown);

@@ -6,6 +6,13 @@ class Track {
         player.track = this;
     }
 
+    /**
+     * Get wall
+     *
+     * @param {Number} position
+     *
+     * @return {Wall|null}
+     */
     getWall(position) {
         if (!this.walls.length) {
             return null;
@@ -14,9 +21,7 @@ class Track {
         const wall = this.walls[0];
 
         if (wall.match(position)) {
-            this.walls.splice(0, 1);
-
-            return wall;
+            return this.walls.splice(0, 1);
         }
 
         return null;

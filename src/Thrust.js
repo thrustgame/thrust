@@ -14,11 +14,11 @@ class Thrust {
         this.onEnd = this.onEnd.bind(this);
 
         // Porperties
-        this.started = false;
+        this.state = 'title';
         this.frame = null;
         this.clock = new Clock();
         this.players = [new Player(65), new Player(76)];
-        this.world = new World(this.players, this.onEnd);
+        this.world = new World(this, this.players, this.onEnd);
         this.renderer = new Renderer(this.world);
 
         this.title = new Title(this);
@@ -26,13 +26,25 @@ class Thrust {
         this.onFrame();
     }
 
-    start() {
-        this.started = true;
-        this.clock.start();
+    reset() {
+        this.players[0].reset();
+        this.players[1].reset();
+        this.world.reset();
     }
 
-    stop() {
-        this.started = false;
+    start() {
+        this.state = 'playing';
+        this.clock.start();
+        this.onFrame();
+    }
+
+    pause() {
+        this.state = 'paused';
+        this.clock.stop();
+    }
+
+    gameover() {
+        this.state = 'gameover';
         this.clock.stop();
     }
 
@@ -42,7 +54,7 @@ class Thrust {
     onFrame() {
         this.frame = requestAnimationFrame(this.onFrame);
 
-        if (this.started) {
+        if (this.state == 'playing') {
             const delta = this.clock.getDelta();
             this.world.update(delta);
         }
@@ -51,8 +63,10 @@ class Thrust {
     }
 
     onEnd() {
-        this.stop();
+        this.pause();
         //this.frame = cancelAnimationFrame(this.frame);
+        this.state = 'gameover';
+        this.title.setState(this.state);
     }
 }
 

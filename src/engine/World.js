@@ -12,15 +12,19 @@ class World {
      * @param {Array} players
      * @param {Function} onEnd
      */
-    constructor(players, onEnd) {
-        this.rooms = new Corridor();
+    constructor(thrust, players, onEnd) {
+        this.thrust = thrust;
         this.players = players;
         this.onEnd = onEnd;
 
-        this.tracks = [
-            new Track(players[0], this.rooms.getWalls()),
-            new Track(players[1], this.rooms.getInverseWalls()),
-        ];
+        this.reset();
+    }
+
+    reset() {
+        this.rooms = new Corridor();
+
+        new Track(this.players[0], this.rooms.getInverseWalls());
+        new Track(this.players[1], this.rooms.getWalls());
     }
 
     getDistance() {
