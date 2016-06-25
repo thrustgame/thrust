@@ -51,7 +51,19 @@ class World {
         let distance = 0;
 
         for (var i = this.players.length - 1; i >= 0; i--) {
-            distance += this.players[i].update(delta)
+            let player = this.players[i];
+
+            distance += player.update(delta);
+
+            let wall = this.rooms.getWall(player.position);
+
+            if (wall) {
+                if (player.thrusting) {
+                    player.increaseSpeed();
+                } else {
+                    player.resetSpeed();
+                }
+            }
         }
 
         if (distance >= this.distance) {

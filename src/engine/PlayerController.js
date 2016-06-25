@@ -28,7 +28,6 @@ class PlayerController {
     }
 
     endCooldown() {
-        console.log('listening');
         this.listening = true;
     }
 }
