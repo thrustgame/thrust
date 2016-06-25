@@ -2,22 +2,22 @@ import Minimap from './Minimap.js';
 
 class Renderer {
     constructor(world) {
-        this.renderer = new PIXI.autoDetectRenderer(
-            window.innerWidth,
-            window.innerHeight
-        );
+        const width = window.innerWidth;
+        const height = window.innerHeight;
+
+        this.renderer = new PIXI.autoDetectRenderer(width, height);
 
         document.body.appendChild(this.renderer.view);
 
-        this.stage = new PIXI.Container();
-
         this.world = world;
-        this.graphics = new PIXI.Graphics();
-        this.minimap = new Minimap(this.graphics);
+        this.scale = width / this.world.distance;
+
+        this.stage = new PIXI.Container();
+        this.minimap = new Minimap(this.world.distance, this.scale, this.stage);
     }
 
     draw() {
-        this.minimap.draw(this.world.players[0].position, this.world.players[1].position);
+        this.minimap.draw([this.world.players[0].position, this.world.players[1].position]);
         this.renderer.render(this.stage);
     }
 }

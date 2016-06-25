@@ -16,12 +16,6 @@ class World
         if (distance >= this.distance) {
             this.onEnd();
         }
-
-        console.log(
-            'Player1: %s | Player2: %s',
-            this.players[0].position,
-            this.players[1].position
-        );
     }
 }
 

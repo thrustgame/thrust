@@ -36,7 +36,6 @@ class Thrust {
 
     onEnd() {
         this.frame = cancelAnimationFrame(this.frame);
-        console.log('STOP!');
     }
 }
 
