@@ -11,6 +11,7 @@ class Canvas {
         this.context = this.element.getContext('2d');
         this.element.width = width;
         this.element.height = height;
+        this.context.imageSmoothingEnabled = false;
     }
 
     setFill(color) {

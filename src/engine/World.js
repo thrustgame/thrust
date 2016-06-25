@@ -17,8 +17,6 @@ class World {
         this.players = players;
         this.onEnd = onEnd;
 
-        console.log(this.rooms);
-
         this.tracks = [
             new Track(players[0], this.rooms.getWalls()),
             new Track(players[1], this.rooms.getInverseWalls()),
@@ -35,19 +33,18 @@ class World {
      * @param {Number} delta
      */
     update(delta) {
-        let distance = 0;
+        this.updatePlayer(this.players[0], delta);
+        this.updatePlayer(this.players[1], delta);
 
-        for (var i = this.players.length - 1; i >= 0; i--) {
-            distance += this.updatePlayer(this.players[i], delta);
-        }
+        const distance = this.players[0].position + this.players[1].position;
 
         if (distance >= this.getDistance()) {
+            //this.players[0].position = this.players[1].position;
             this.onEnd();
         }
     }
 
     updatePlayer(player, delta) {
-        const previous = player.position;
         const position = player.update(delta);
         const wall = player.track.getWall(position);
 

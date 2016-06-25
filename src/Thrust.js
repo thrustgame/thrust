@@ -51,7 +51,8 @@ class Thrust {
     }
 
     onEnd() {
-        this.frame = cancelAnimationFrame(this.frame);
+        this.stop();
+        //this.frame = cancelAnimationFrame(this.frame);
     }
 }
 

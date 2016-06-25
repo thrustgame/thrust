@@ -1,6 +1,6 @@
 import PlayerController from './PlayerController'
 
-const speed = 0.2;
+const speed = 200;
 
 class Player
 {
@@ -34,7 +34,7 @@ class Player
     }
 
     update(delta) {
-        this.position += this.speed * delta;
+        this.position = Math.round(this.position + this.speed * delta);
 
         return this.position;
     }

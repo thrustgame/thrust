@@ -19,16 +19,10 @@ class Renderer {
         this.fov = this.world.getDistance() / 20;
         this.scale = width / this.fov;
 
-        this.canvas.context.imageSmoothingEnabled = false;
-
         const halfHeight = Math.ceil(height / 2);
 
         this.map = new Map(this.world.rooms, this.world.getDistance(), this.scale, halfHeight);
-        this.cameras = [
-            new Camera(0, 0, this.world.players[0]),
-            new Camera(0, halfHeight, this.world.players[1]),
-        ];
-
+        this.cameras = [new Camera(0, 0), new Camera(0, halfHeight)];
         this.avatars = [
             new Avatar(this.world.players[0], 'rtl'),
             new Avatar(this.world.players[1], 'ltr')
@@ -43,18 +37,35 @@ class Renderer {
     draw() {
         this.canvas.clear();
 
-        this.cameras[0].x = -this.map.canvas.element.width + this.canvas.element.width + (this.cameras[0].player.position * this.scale);
-        this.cameras[1].x = -this.cameras[1].player.position * this.scale;
+        const screenWidth = this.canvas.element.width;
+        const screenHeight = this.canvas.element.height;
+        const screenHalfWidth = screenWidth / 2;
+        const screenHalfHeight = screenHeight / 2;
+        const mapWidth = this.map.canvas.element.width;
+        const player1 = this.world.players[0].position * this.scale;
+        const player2 = this.world.players[1].position * this.scale;
 
-        this.canvas.drawImageTo(this.map.canvas.element, this.cameras[0].x, this.cameras[0].y);
-        this.canvas.drawImageTo(this.map.canvas.element, this.cameras[1].x, this.cameras[1].y);
+        this.cameras[0].x = Math.round(-screenHalfWidth - mapWidth + screenWidth + player1);
+        this.cameras[1].x = Math.round(screenHalfWidth - player2);
+
+        this.canvas.drawImage(this.map.canvas.element, this.cameras[0].x, this.cameras[0].y, mapWidth, screenHalfHeight);
+        this.canvas.drawImage(this.map.canvas.element, this.cameras[1].x, this.cameras[1].y, mapWidth, screenHalfHeight);
 
         const margin = this.canvas.element.height / 4;
         const radius = this.avatars[0].radius;
+        const avatar1 = {};
+        const avatar2 = {};
 
-        this.canvas.drawImageTo(this.avatars[0].draw(), this.canvas.element.width / 2, margin - radius);
-        this.canvas.drawImageTo(this.avatars[1].draw(), this.canvas.element.width / 2 - radius*2, (margin * 3) - radius);
+        avatar1.size = radius * (this.avatars[0].player.speed / 200);
+        avatar1.x = Math.round(screenHalfWidth);
+        avatar1.y = Math.round(margin - avatar1.size/2);
 
+        avatar2.size = radius * (this.avatars[1].player.speed / 200);
+        avatar2.x = Math.round(screenHalfWidth - avatar2.size);
+        avatar2.y = Math.round(margin * 3 - avatar2.size/2);
+
+        this.canvas.drawImage(this.avatars[0].draw(), avatar1.x, avatar1.y, avatar1.size, avatar1.size);
+        this.canvas.drawImage(this.avatars[1].draw(), avatar2.x, avatar2.y, avatar2.size, avatar2.size);
         this.minimap.draw(this.canvas, this.avatars);
     }
 }

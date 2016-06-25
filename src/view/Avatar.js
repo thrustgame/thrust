@@ -5,13 +5,14 @@ class Avatar {
         this.player = player;
         this.radius = 50;
 
-        this.idle = Avatar.createLozange('#FFFB52', '#e2df48', direction);
-        this.thrust = Avatar.createLozange('#fffa1c', '#eae61b', direction);
+        this.idle = Avatar.createLozange(this.radius, '#FFFB52', '#e2df48', direction);
+        this.thrust = Avatar.createLozange(this.radius, '#fffa1c', '#eae61b', direction);
     }
 
-    static createLozange(color, colorDark, direction) {
-        const canvas = new Canvas(100, 100);
-        const context = canvas.element.getContext('2d');
+    static createLozange(radius, color, colorDark, direction) {
+        const size = radius * 2;
+        const canvas = new Canvas(size, size);
+        const context = canvas.context;
 
         if (direction == 'rtl') {
             canvas.reverse();
@@ -19,27 +20,27 @@ class Avatar {
 
         canvas.setFill(color);
         context.beginPath();
-        context.moveTo(25,50);
-        context.lineTo(75,25);
-        context.lineTo(100,50);
+        context.moveTo(0, 0.5 * size);
+        context.lineTo(0.75 * size, 0.25 * size);
+        context.lineTo(1 * size, 0.5 * size);
         context.fill();
 
         canvas.setFill(colorDark);
         context.beginPath();
-        context.moveTo(25,50);
-        context.lineTo(75,75);
-        context.lineTo(100,50);
+        context.moveTo(0, 0.5 * size);
+        context.lineTo(0.75 * size, 0.75 * size);
+        context.lineTo(1 * size, 0.5 * size);
         context.fill();
 
         if (direction == 'rtl') {
             canvas.reverse();
         }
 
-        return canvas.element;
+        return canvas;
     }
 
     draw() {
-        return this.player.thrusting ? this.thrust : this.idle;
+        return this.player.thrusting ? this.thrust.element : this.idle.element;
     }
 }
 

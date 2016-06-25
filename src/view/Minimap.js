@@ -43,10 +43,11 @@ class Minimap {
     drawPlayer(canvas, avatar, direction) {
         const position = avatar.player.position;
         const ltr = (direction == 'left');
-        const x = (ltr ? position : this.distance - position) * this.scale;
+        const width = radius * 2;
+        const x = (ltr ? position : this.distance - position) * this.scale + (ltr ? -width : 0);
         const color = ltr ? 0xFF00000 : 0x00FF00;
 
-        canvas.drawImage(avatar.draw(), x - radius, this.halfHeight, radius * 2, radius * 2);
+        canvas.drawImage(avatar.draw(), x, this.halfHeight, width, width);
     }
 }
 
