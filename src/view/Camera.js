@@ -14,7 +14,8 @@ class Camera {
      */
     constructor(rooms, fov, width, height, scale, stage) {
         this.rooms = rooms;
-        this.fov = fov;
+        this.width = fov;
+        this.halfWidth = fov / 2;
         this.screen = { width, height };
         this.scale = scale;
 
@@ -29,8 +30,8 @@ class Camera {
      * @param {Number} position
      */
     draw(position) {
-        const start = (position - fov/2) * this.scale;
-        const end = (position + fov/2) * this.scale;
+        const start = (position - this.halfWidth) * this.scale;
+        const end = (position + this.halfWidth) * this.scale;
         const rooms = this.rooms.filter(start, end);
 
         for (var i = rooms.length - 1; i >= 0; i--) {
@@ -46,7 +47,7 @@ class Camera {
      * @param {Room} room
      */
     drawRoom(start, end, room) {
-
+        console.log(room);
     }
 }
 
