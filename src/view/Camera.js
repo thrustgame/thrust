@@ -22,11 +22,8 @@ class Camera {
             width,
             height
         };
-        this.top = lane * this.screen.halfHeight;
+        this.top = Math.round(lane * this.screen.halfHeight);
         this.scale = width / fov;
-        this.graphic = new PIXI.Graphics();
-
-        stage.addChild(this.graphic);
     }
 
     /**
@@ -34,13 +31,13 @@ class Camera {
      *
      * @param {Number} position
      */
-    draw(position) {
+    draw(canvas, position) {
         const start = position - this.halfWidth;
         const end = position + this.halfWidth;
         const rooms = this.rooms.filter(start, end);
 
         for (var i = rooms.length - 1; i >= 0; i--) {
-            this.drawRoom(start, end, rooms[i]);
+            this.drawRoom(canvas, start, end, rooms[i]);
         }
     }
 
@@ -51,15 +48,13 @@ class Camera {
      * @param {Number} end
      * @param {Room} room
      */
-    drawRoom(start, end, room) {
-        const x = (room.start - start) * this.scale;
-        const width = Math.min(room.size * this.scale, this.screen.width);
-        const height = this.screen.halfHeight;
+    drawRoom(canvas, start, end, room) {
+        const x = Math.round((room.start - start) * this.scale);
+        const width = Math.round(room.size * this.scale);
+        const height = Math.round(this.screen.halfHeight);
 
-        this.graphic.lineStyle(0);
-        this.graphic.beginFill(room.color, 1);
-        this.graphic.drawRect(x, this.top, width, height);
-        this.graphic.endFill();
+        canvas.setFill(room.color);
+        canvas.drawRect(x, this.top, width, height);
     }
 }
 
