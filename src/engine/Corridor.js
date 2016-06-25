@@ -1,7 +1,7 @@
 import Room from './Room.js';
 import Wall from './Wall.js';
 
-const baseSize = 0.25;
+const baseSize = 0.3;
 
 class Corridor {
     constructor(length = 50) {
@@ -16,7 +16,7 @@ class Corridor {
     addRoom() {
         const length = this.rooms.length;
         const start = length ? this.rooms[length - 1].end : 0;
-        const size = baseSize * (1 + (Math.random() - 0.5) * 0.3);
+        const size = baseSize * (1 + (Math.random() - 0.5));
 
         this.rooms.push(new Room(length, start, start + size));
         this.distance += size;

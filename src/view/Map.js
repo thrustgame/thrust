@@ -1,5 +1,7 @@
 import Canvas from '../tool/Canvas.js';
 
+const baseWallSize = 0.03;
+
 class Map {
     constructor(corridor, distance, scale, height) {
         this.corridor = corridor;
@@ -23,8 +25,11 @@ class Map {
         this.canvas.setFill(room.color);
         this.canvas.drawRect(x, 0, width, this.canvas.element.height);
 
+        const wallSize = Math.round(baseWallSize * this.scale);
+        const wallX = x + width - wallSize;
+
         this.canvas.setFill(room.wallColor);
-        this.canvas.drawRect(room.wall * this.scale, 0, (room.size * 0.1 * this.scale), this.canvas.element.height);
+        this.canvas.drawRect(wallX, 0, wallSize, this.canvas.element.height)
     }
 }
 
