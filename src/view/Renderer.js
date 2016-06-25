@@ -32,8 +32,8 @@ class Renderer {
         ];
 
         this.avatars = [
-            new Avatar(this.world.players[0]),
-            new Avatar(this.world.players[1])
+            new Avatar(this.world.players[0], 'rtl'),
+            new Avatar(this.world.players[1], 'ltr')
         ];
 
         this.minimap = new Minimap(this.world.distance, width, height);
