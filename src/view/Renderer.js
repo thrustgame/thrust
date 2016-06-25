@@ -13,21 +13,29 @@ class Renderer {
 
         this.renderer = new PIXI.autoDetectRenderer(width, height);
 
+        console.log(this.renderer);
+
         document.body.appendChild(this.renderer.view);
 
         this.world = world;
-        this.scale = width / this.world.distance;
 
         this.stage = new PIXI.Container();
-        this.camera = new Camera(this.world.rooms, this.world.distance / 20, width, height, this.scale, this.stage);
-        this.minimap = new Minimap(this.world.distance, height, this.scale, this.stage);
+        this.cameras = [
+            new Camera(0, this.world.rooms, this.world.distance / 20, width, height, this.stage),
+            new Camera(1, this.world.rooms, this.world.distance / 20, width, height, this.stage),
+        ];
+        this.minimap = new Minimap(this.world.distance, width, height, this.stage);
+
+        this.stage.interactive = true;
     }
 
     /**
      * Draw the whole game
      */
     draw() {
-        this.camera.draw(this.world.players[0].position);
+        for (var i = this.cameras.length - 1; i >= 0; i--) {
+            this.cameras[i].draw(this.world.players[i].position);
+        }
         this.minimap.draw([this.world.players[0].position, this.world.players[1].position]);
         this.renderer.render(this.stage);
     }

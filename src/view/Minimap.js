@@ -10,10 +10,10 @@ class Minimap {
      * @param {Number} scale
      * @param {Number} stage
      */
-    constructor(distance, height, scale, stage) {
+    constructor(distance, width, height, stage) {
         this.distance = distance;
         this.height = height;
-        this.scale = scale;
+        this.scale = width / distance;
 
         this.graphics = [new PIXI.Graphics(), new PIXI.Graphics()];
 
