@@ -52,8 +52,21 @@
             font-weight: 800;
         }
 
+        .instructions, .victory {
+            position: absolute;
+            height: 50%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            top: 0;
+        }
+
         .overlay .instructions p {
             font-size: 0.8em;
+        }
+
+        .overlay .victory p {
+
         }
 
         .overlay p {
@@ -62,25 +75,18 @@
             letter-spacing: 0.2em;
         }
 
-        #player1 {
-            position: absolute;
-            height: 50%;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            top: 0;
+        .player1 {
             right: 15%;
             transform: rotate(180deg);
         }
 
-        #player2 {
-            position: absolute;
-            height: 50%;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
+        .player2 {
             top: 50%;
             left: 10%;
+        }
+
+        .victory h2 {
+            font-size: 3em;
         }
     </style>
 </head>
@@ -90,11 +96,11 @@
         <h1>Thrust</h1>
         <p class="blink">press space to start</p>
 
-        <div class="instructions" id="player1">
+        <div class="instructions player1" id="player1">
             <h2>player 1</h2>
             <p>press A to THRUST</p>
         </div>
-        <div class="instructions" id="player2">
+        <div class="instructions player2" id="player2">
             <h2>player 2</h2>
             <p>press L to THRUST</p>
         </div>
@@ -108,6 +114,14 @@
     <div id="gameover" class="overlay">
         <h1>GAME OVER</h1>
         <p class="blink">Press space to play again</p>
+        <div class="victory player1">
+            <!-- <h2>player 1</h2> -->
+            <h2 id="player1-victory"></h2>
+        </div>
+        <div class="victory player2">
+            <!-- <h2>player 2</h2> -->
+            <h2 id="player2-victory"></h2>
+        </div>
     </div>
 
     <script src="/node_modules/pixi.js/bin/pixi.min.js"></script>
