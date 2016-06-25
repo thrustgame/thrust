@@ -36,10 +36,10 @@ class Title {
 
         switch (state) {
             case 'paused':
-                this.overlays.pause.style.display = 'block';
+                this.overlays.pause.style.display = 'flex';
                 break;
             case 'gameover':
-                this.overlays.gameover.style.display = 'block';
+                this.overlays.gameover.style.display = 'flex';
         }
     }
 
