@@ -53,6 +53,9 @@
         }
 
         .instructions, .victory {
+            /*width: 100%;*/
+            /*text-align: center;*/
+            /*left: 0;*/
             position: absolute;
             height: 50%;
             display: flex;
@@ -76,13 +79,13 @@
         }
 
         .player1 {
-            right: 15%;
+            left: 10%;
             transform: rotate(180deg);
         }
 
         .player2 {
+            right: 15%;
             top: 50%;
-            left: 10%;
         }
 
         .victory h2 {
@@ -94,15 +97,15 @@
     <canvas id="canvas"></canvas>
     <div id="title" class="overlay">
         <h1>Thrust</h1>
-        <p class="blink">press space to start</p>
+        <!-- <p class="blink">press space to start</p> -->
 
         <div class="instructions player1" id="player1">
             <h2>player 1</h2>
-            <p>press A to THRUST</p>
+            <p class="blink" id="player1-ready">press A to THRUST <strong>&rarr;</strong></p>
         </div>
         <div class="instructions player2" id="player2">
             <h2>player 2</h2>
-            <p>press L to THRUST</p>
+            <p class="blink" id="player2-ready">press L to THRUST <strong>&rarr;</strong></p>
         </div>
     </div>
 

@@ -1,12 +1,15 @@
 import AudioPlayer from '../tool/AudioPlayer.js'
+import ReadyCheck from '../engine/ReadyCheck.js'
 
 class Title {
     constructor(thrust) {
         this.thrust = thrust;
         this.setVictoryMessages = this.setVictoryMessages.bind(this);
+        this.startGame = this.startGame.bind(this);
         this.setState = this.setState.bind(this);
         this.toggleState = this.toggleState.bind(this);
         this.onKeyDown = this.onKeyDown.bind(this);
+        this.readyCheck = new ReadyCheck(this.startGame);
 
         this.overlays = {
             title: document.getElementById('title'),
@@ -21,6 +24,18 @@ class Title {
 
     onKeyDown(event) {
         switch (event.keyCode) {
+            case this.thrust.players[0].controller.key:
+                if (this.thrust.state == 'title') {
+                    this.readyCheck.setReady(0);
+                    document.getElementById('player1-ready').classList.remove('blink');
+                }
+                break;
+            case this.thrust.players[1].controller.key:
+                if (this.thrust.state == 'title') {
+                    this.readyCheck.setReady(1);
+                    document.getElementById('player2-ready').classList.remove('blink');
+                }
+                break;
             case 32:
                 this.toggleState();
                 break;
@@ -28,6 +43,11 @@ class Title {
                 this.audioPlayer.toggle();
                 break;
         }
+    }
+
+    startGame() {
+        this.thrust.start();
+        this.setState(this.thrust.state);
     }
 
     setVictoryMessages(players, distance) {
@@ -39,26 +59,6 @@ class Title {
 
         p1.innerText = p1percent + '%';
         p2.innerText = p2percent + '%';
-
-        // console.log(p1, p2);
-
-        // let drawMessage = 'draw :|';
-        // let winMessage = 'winner \\o/';
-        // let loseMessage = 'loser :(';
-
-        // if (players[0].position == players[1].position) {
-        //     console.log('draw');
-        //     p1.innerText = drawMessage;
-        //     p2.innerText = drawMessage;
-        // } else if (players[0].position > players[1].position) {
-        //     console.log('p1 wins');
-        //     p1.innerText = winMessage;
-        //     p2.innerText = loseMessage;
-        // } else {
-        //     console.log('p2 wins');
-        //     p1.innerText = loseMessage;
-        //     p2.innerText = winMessage;
-        // }
     }
 
     setState(state) {
@@ -77,7 +77,6 @@ class Title {
 
     toggleState() {
         switch (this.thrust.state) {
-            case 'title':
             case 'paused':
                 this.thrust.start();
                 break;
@@ -87,6 +86,7 @@ class Title {
             case 'gameover':
                 this.thrust.reset();
                 this.thrust.start();
+                break;
         }
 
 

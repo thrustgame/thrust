@@ -9,7 +9,7 @@ class PlayerController {
 
         this.timeout = 500;
         this.cooldown = 0;
-        this.listening = true;
+        this.listening = false;
 
         document.body.addEventListener('keydown', this.onKeyDown);
     }

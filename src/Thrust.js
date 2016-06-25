@@ -14,6 +14,7 @@ class Thrust {
         this.onEnd = this.onEnd.bind(this);
 
         // Porperties
+        this.title = new Title(this);
         this.state = 'title';
         this.frame = null;
         this.clock = new Clock();
@@ -21,7 +22,6 @@ class Thrust {
         this.world = new World(this, this.players, this.onEnd);
         this.renderer = new Renderer(this.world);
 
-        this.title = new Title(this);
 
         this.onFrame();
     }
@@ -31,6 +31,8 @@ class Thrust {
     }
 
     start() {
+        this.players[0].controller.listening = true;
+        this.players[1].controller.listening = true;
         this.state = 'playing';
         this.clock.start();
         this.onFrame();
