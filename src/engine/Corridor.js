@@ -5,7 +5,7 @@ class Corridor {
 
     static roomSize = 300;
 
-    constructor(length = 50) {
+    constructor(length = 5) {
         this.rooms = [];
         this.distance = 0;
 

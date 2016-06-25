@@ -67,6 +67,7 @@ class Thrust {
         //this.frame = cancelAnimationFrame(this.frame);
         this.state = 'gameover';
         this.title.setState(this.state);
+        this.title.setVictoryMessages(this.players, this.world.rooms.distance);
     }
 }
 
