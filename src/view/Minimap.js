@@ -2,8 +2,9 @@ class Minimap {
     /**
      * Constructor
      */
-    constructor(distance, scale, stage) {
+    constructor(distance, height, scale, stage) {
         this.distance = distance;
+        this.height = height;
         this.scale = scale;
 
         this.graphics = [new PIXI.Graphics(), new PIXI.Graphics()];
@@ -15,13 +16,14 @@ class Minimap {
     drawPlayer(graphic, position, direction) {
 
         const ltr = (direction == 'right');
+
         const x = (ltr ? position : this.distance - position) * this.scale;
         const color = ltr ? 0xFF00000 : 0x00FF00;
 
         graphic.clear();
         graphic.lineStyle(0);
         graphic.beginFill(color, 1);
-        graphic.drawCircle(x,  200, 10);
+        graphic.drawCircle(x,  this.height / 2, 10);
         graphic.endFill();
     }
 
