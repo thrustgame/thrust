@@ -67,11 +67,15 @@ class Title {
         this.overlays.gameover.style.display = 'none';
 
         switch (state) {
+            case 'title':
+                this.overlays.title.style.display = 'flex';
+                break;
             case 'paused':
                 this.overlays.pause.style.display = 'flex';
                 break;
             case 'gameover':
                 this.overlays.gameover.style.display = 'flex';
+                break;
         }
     }
 
@@ -88,7 +92,6 @@ class Title {
                 this.thrust.start();
                 break;
         }
-
 
         this.setState(this.thrust.state);
     }
