@@ -12,17 +12,19 @@ class Renderer {
      * @param {World} world
      */
     constructor(world) {
-        const width = window.innerWidth;
-        const height = window.innerHeight;
+        const width = window.innerWidth * devicePixelRatio;
+        const height = window.innerHeight * devicePixelRatio;
 
         this.world = world;
         this.canvas = new Canvas(width, height, document.getElementById('canvas'));
+        this.canvas.element.style.width = `${window.innerWidth}px`;
+        this.canvas.element.style.height = `${window.innerHeigh}px`;
         this.reset();
     }
 
     reset() {
-        const width = window.innerWidth;
-        const height = window.innerHeight;
+        const width = this.canvas.element.width;
+        const height = this.canvas.element.height;
         const halfHeight = Math.ceil(height / 2);
         const distance = this.world.getDistance();
 
