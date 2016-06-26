@@ -7,11 +7,19 @@ class Avatar {
 
     static radius = 200;
 
+    static shakeTime = 300;
+
     constructor(player, direction) {
         this.player = player;
         this.idle = Avatar.createLozange('#FFFD1B', '#BCBB14', direction, 0.5, 0.75, 0.25);
-
         this.thrust = Avatar.createLozange('#F5DF0E', '#AB9B0A', direction, 0.25, 1, 0.25);
+        this.shake = 0;
+        this.shakeTimout = null;
+
+        this.startShake = this.startShake.bind(this);
+        this.endShake = this.endShake.bind(this);
+
+        this.player.setWallEventListener(this.startShake);
     }
 
     static createFrames(color, colorDark, direction) {
@@ -63,6 +71,26 @@ class Avatar {
         }
 
         return canvas;
+    }
+
+    startShake() {
+        this.shake = Date.now();
+        this.shakeTimout = setTimeout(this.endShake, Avatar.shakeTime);
+    }
+
+    endShake() {
+        this.shake = false;
+        clearTimeout(this.shakeTimout);
+    }
+
+    getShake() {
+        if (!this.shake) {
+            return 0;
+        }
+
+        const time = (Date.now() - this.shake) / Avatar.shakeTime * 4 * Math.PI;
+
+        return Math.cos(time) * Avatar.radius / 50;
     }
 
     draw() {

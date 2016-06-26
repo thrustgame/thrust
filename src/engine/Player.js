@@ -12,6 +12,7 @@ class Player {
         this.speed = Player.speed;
         this.maxSpeed = Player.speed * 2;
         this.thrusting = false;
+        this.wallEventListener = null;
 
         this.controller = new PlayerController(this, key);
     }
@@ -36,12 +37,19 @@ class Player {
 
     resetSpeed() {
         this.speed = Player.speed;
+        if (this.wallEventListener) {
+            this.wallEventListener();
+        }
     }
 
     update(delta) {
         this.position = Math.round(this.position + this.speed * delta);
 
         return this.position;
+    }
+
+    setWallEventListener(callback) {
+        this.wallEventListener = callback;
     }
 }
 

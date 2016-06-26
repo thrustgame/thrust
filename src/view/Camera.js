@@ -14,7 +14,7 @@ class Camera {
         const size = this.avatar.getSize();
         const x = Math.round(this.centerX - size / 2);
         const y = Math.round(this.centerY - size / 2);
-
+        const shake = this.avatar.getShake();
         const { start, end } = this.getViewPort();
 
         for (let  i = this.map.corridor.rooms.length - 1; i >= 0; i--) {
@@ -24,7 +24,7 @@ class Camera {
             }
         }
 
-        this.canvas.drawImage(this.avatar.draw(), x, y, size, size);
+        this.canvas.drawImage(this.avatar.draw(), x, y + shake, size, size);
 
         if (alterEgo) {
             const size = alterEgo.getSize();
