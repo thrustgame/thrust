@@ -1,3 +1,5 @@
+import Player from './Player.js';
+
 class PlayerController {
     constructor(player, key, timeout) {
         this.player = player;
@@ -19,9 +21,11 @@ class PlayerController {
         if (this.listening && event.keyCode == this.key) {
             clearTimeout(this.thrustTimeout);
 
+            const time = this.timeout / (this.player.speed / Player.speed);
+
             this.listening = false;
             this.player.thrust();
-            this.thrustTimeout = setTimeout(this.endThrust, this.timeout);
+            this.thrustTimeout = setTimeout(this.endThrust, time);
         }
     }
 
