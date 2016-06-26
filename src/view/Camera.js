@@ -27,9 +27,10 @@ class Camera {
         this.canvas.drawImage(this.avatar.draw(), x, y + shake, size, size);
 
         if (alterEgo) {
-            const size = alterEgo.getSize();
+            const aesize = alterEgo.getSize();
             const aex = this.getAlterEgoPosition(x, difference);
-            this.canvas.drawImage(alterEgo.draw(), aex, y, size, size);
+            const aey = Math.round(this.centerY - aesize / 2);
+            this.canvas.drawImage(alterEgo.draw(), aex, aey, aesize, aesize);
         }
     }
 
