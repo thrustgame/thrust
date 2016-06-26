@@ -36,8 +36,13 @@ class Renderer {
      */
     draw() {
         this.canvas.clear();
-        this.cameras[0].draw();
-        this.cameras[1].draw();
+
+        const meet = this.world.meet(this.canvas.element.width / this.scale);
+        const difference = meet ? Math.round(this.world.getDifference() * this.scale) : 0;
+
+        this.cameras[0].draw(meet ? this.cameras[1].avatar : null, difference);
+        this.cameras[1].draw(meet ? this.cameras[0].avatar : null, difference);
+
         this.minimap.draw(this.canvas, [
             this.cameras[0].avatar,
             this.cameras[1].avatar,

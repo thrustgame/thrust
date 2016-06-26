@@ -10,7 +10,7 @@ class Camera {
         this.avatar = new Avatar(player, y === 0);
     }
 
-    draw() {
+    draw(alterEgo = null, difference = 0) {
         const { x, y, size } = this.updateAvatar();
         const { start, end } = this.getViewPort();
 
@@ -22,6 +22,15 @@ class Camera {
         }
 
         this.canvas.drawImage(this.avatar.draw(), x, y, size, size);
+
+        if (alterEgo) {
+            const aex = this.getAlterEgoPosition(x, size, difference);
+            this.canvas.drawImage(alterEgo.draw(), aex, y, size, size);
+        }
+    }
+
+    getAlterEgoPosition(x, size, difference) {
+        return x + size + difference;
     }
 
     drawRoom(room) {

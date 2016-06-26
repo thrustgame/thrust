@@ -40,10 +40,8 @@ class World {
         this.updatePlayer(this.players[0], delta);
         this.updatePlayer(this.players[1], delta);
 
-        const distance = this.players[0].position + this.players[1].position;
-
-        if (distance >= this.getDistance()) {
-            //this.players[0].position = this.players[1].position;
+        if (this.meet()) {
+            this.players[1].position = this.getDistance() - this.players[0].position;
             this.onEnd();
         }
     }
@@ -61,6 +59,14 @@ class World {
         }
 
         return position;
+    }
+
+    meet(limit = 0) {
+        return this.getDifference() <= limit;
+    }
+
+    getDifference() {
+        return this.getDistance() - (this.players[0].position + this.players[1].position);
     }
 }
 

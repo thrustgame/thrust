@@ -36,6 +36,10 @@ class TopCamera extends Camera {
     getView(room) {
         return room.mirror.element;
     }
+
+    getAlterEgoPosition(x, size, difference) {
+        return x - size - difference;
+    }
 }
 
 export default TopCamera;
