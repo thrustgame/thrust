@@ -1,31 +1,46 @@
 import Player from './Player.js';
 
 class PlayerController {
-    constructor(player, key, timeout) {
+    constructor(player, key, zone, thrustDuration) {
         this.player = player;
         this.key = key;
+        this.zone = zone;
 
         this.onKeyDown = this.onKeyDown.bind(this);
+        this.onTouch = this.onTouch.bind(this);
         this.endThrust = this.endThrust.bind(this);
 
-        this.thrustTimeout;
-
-        this.timeout = timeout;
+        this.thrustTimeout = null;
+        this.thrustDuration = thrustDuration;
         this.cooldown = 0;
         this.listening = false;
 
-        document.body.addEventListener('keydown', this.onKeyDown);
+        window.addEventListener('keydown', this.onKeyDown);
+        window.addEventListener('touchstart', this.onTouch, false);
     }
 
     onKeyDown(event) {
-        if (this.listening && event.keyCode == this.key) {
-            clearTimeout(this.thrustTimeout);
+        if (event.keyCode == this.key) {
+            this.onAction();
+        }
+    }
 
-            const time = this.timeout / (this.player.speed / Player.speed);
+    onTouch(event) {
+        for (let i = event.changedTouches.length - 1; i >= 0; i--) {
+            let touch = event.changedTouches[i].clientY;
 
+            if (touch >= this.zone.start && touch <= this.zone.end) {
+                return this.onAction();
+            }
+        }
+    }
+
+    onAction() {
+        if (this.listening) {
+            this.thrustTimeout = clearTimeout(this.thrustTimeout);
             this.listening = false;
             this.player.thrust();
-            this.thrustTimeout = setTimeout(this.endThrust, time);
+            setTimeout(this.endThrust, this.thrustDuration / this.player.getSpeedRatio());
         }
     }
 

@@ -4,7 +4,7 @@ class Player {
 
     static speed = 300;
 
-    constructor(key) {
+    constructor(key, zone) {
         this.thrust = this.thrust.bind(this);
         this.endThrust = this.endThrust.bind(this);
 
@@ -13,9 +13,8 @@ class Player {
         this.maxSpeed = Player.speed * 4;
         this.thrusting = false;
         this.wallEventListener = null;
-        this.allowDoubleThrust = true;
 
-        this.controller = new PlayerController(this, key, this.allowDoubleThrust ? 400 : 500);
+        this.controller = new PlayerController(this, key, zone, 400);
     }
 
     reset() {
@@ -34,10 +33,7 @@ class Player {
 
     increaseSpeed() {
         this.speed = Math.min(this.speed + Player.speed / 5, this.maxSpeed);
-
-        if (this.allowDoubleThrust) {
-            this.controller.listening = true;
-        }
+        this.controller.listening = true;
     }
 
     resetSpeed() {
@@ -55,6 +51,10 @@ class Player {
 
     setWallEventListener(callback) {
         this.wallEventListener = callback;
+    }
+
+    getSpeedRatio() {
+        return this.speed / Player.speed;
     }
 }
 

@@ -71,6 +71,11 @@ class Canvas {
         return this.element.toDataURL();
     }
 
+    /**
+     * Debug canvas content
+     *
+     * @param {Boolean} image
+     */
     debug(image = false) {
         const data = this.toString();
 

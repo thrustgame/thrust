@@ -1,7 +1,23 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Thrust</title>
+    <title>THRUST</title>
+
+    <meta name="description" content="THRUST">
+
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="THRUST">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:site" content="@thrustgame" />
+    <meta name="twitter:title" content="thrust" />
+    <meta name="twitter:description" content="THRUST" />
+    <meta name="twitter:image" content="https://pbs.twimg.com/profile_images/746833442088882176/7msLz4fM.jpg" />
+
     <link rel="stylesheet" href="css/normalize.css">
     <link rel="stylesheet" href="css/main.css">
 
@@ -18,16 +34,21 @@
         </div>
     </div>
     <div id="title" class="overlay">
-        <h1>Thrust</h1>
-        <!-- <p class="blink">press space to start</p> -->
+        <h1>THRUST</h1>
 
         <div class="instructions player1" id="player1">
             <h2>player 1</h2>
-            <p class="blink" id="player1-ready">press A to THRUST <strong>&rarr;</strong></p>
+            <p class="blink" id="player1-ready">
+                press <strong class="letter-control">A</strong>
+                to THRUST <strong>&rarr;</strong>
+            </p>
         </div>
         <div class="instructions player2" id="player2">
             <h2>player 2</h2>
-            <p class="blink" id="player2-ready">press L to THRUST <strong>&rarr;</strong></p>
+            <p class="blink" id="player2-ready">
+                press <strong class="letter-control">L</strong>
+                to THRUST <strong>&rarr;</strong>
+            </p>
         </div>
     </div>
 
@@ -40,16 +61,13 @@
         <h1>GAME OVER</h1>
         <p class="blink">Press space to play again</p>
         <div class="victory player1">
-            <!-- <h2>player 1</h2> -->
             <h2 id="player1-victory"></h2>
         </div>
         <div class="victory player2">
-            <!-- <h2>player 2</h2> -->
             <h2 id="player2-victory"></h2>
         </div>
     </div>
 
-    <script src="/node_modules/pixi.js/bin/pixi.min.js"></script>
     <script src="dist/thrust.js"></script>
 </body>
 </html>

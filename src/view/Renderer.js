@@ -20,6 +20,8 @@ class Renderer {
         this.fov = this.world.getDistance() / 20;
         this.scale = width / this.fov;
 
+        console.log(width, this.fov, this.scale);
+
         const halfHeight = Math.ceil(height / 2);
 
         this.map = new Map(this.world.rooms, this.world.getDistance(), this.scale, halfHeight);
@@ -27,6 +29,8 @@ class Renderer {
             new TopCamera(this.canvas, this.map, this.world.players[0], this.scale, 0),
             new BottomCamera(this.canvas, this.map, this.world.players[1], this.scale, halfHeight)
         ];
+
+        console.log(this.map);
 
         this.minimap = new Minimap(this.world.getDistance(), width, height);
     }
