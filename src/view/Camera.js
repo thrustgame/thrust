@@ -10,22 +10,32 @@ class Camera {
         this.avatar = new Avatar(player, y === 0);
     }
 
-    getPlayerPosition() {
-        return this.player.position * this.scale;
-    }
-
     draw() {
-        this.canvas.drawImage(
-            this.map,
-            this.getX(),
-            this.y,
-            this.map.width,
-            this.canvas.element.height / 2
-        );
-
         const { x, y, size } = this.updateAvatar();
+        const { start, end } = this.getViewPort();
+
+        for (let  i = this.map.corridor.rooms.length - 1; i >= 0; i--) {
+            let room = this.map.corridor.rooms[i];
+            if (room.match(start, end)) {
+                this.drawRoom(room);
+            }
+        }
 
         this.canvas.drawImage(this.avatar.draw(), x, y, size, size);
+    }
+
+    drawRoom(room) {
+        this.canvas.drawImage(
+            this.getView(room),
+            this.translate(room.start),
+            this.y,
+            room.view.element.width,
+            this.canvas.element.height / 2
+        );
+    }
+
+    getView(room) {
+        return room.view.element;
     }
 }
 

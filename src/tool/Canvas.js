@@ -63,6 +63,18 @@ class Canvas {
     toString() {
         return this.element.toDataURL();
     }
+
+    debug(image = false) {
+        const data = this.toString();
+
+        if (image) {
+            const image = new Image();
+            image.src = data;
+            document.body.appendChild(image);
+        } else {
+            console.info(data);
+        }
+    }
 }
 
 export default Canvas;

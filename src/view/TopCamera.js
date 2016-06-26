@@ -3,12 +3,22 @@ import Avatar from './Avatar.js';
 import Player from '../engine/Player.js';
 
 class TopCamera extends Camera {
-    getX() {
-        const screenWidth = this.canvas.element.width;
-        const screenHalfWidth = screenWidth / 4;
-        const mapWidth = this.map.width;
 
-        return Math.round(-screenHalfWidth - mapWidth + screenWidth + this.getPlayerPosition());
+    translate(x) {
+        const margin = this.canvas.element.width * 3 / 4;
+        const position = this.map.corridor.distance - this.player.position;
+
+        return Math.round(margin + (x - position) * this.scale);
+    }
+
+    getViewPort() {
+        const margin = this.canvas.element.width / 4 / this.scale;
+        const position = this.map.corridor.distance - this.player.position;
+
+        return {
+            start: position - Math.floor(margin * 3),
+            end: position + Math.floor(margin),
+        };
     }
 
     updateAvatar() {
@@ -21,6 +31,10 @@ class TopCamera extends Camera {
         avatar.y = Math.round(margin - avatar.size / 2);
 
         return avatar;
+    }
+
+    getView(room) {
+        return room.mirror.element;
     }
 }
 

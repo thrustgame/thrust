@@ -22,8 +22,10 @@ class Thrust {
         this.world = new World(this, this.players, this.onEnd);
         this.renderer = new Renderer(this.world);
 
-
         this.onFrame();
+
+        window.addEventListener('error', this.onEnd);
+        window.onError = this.onEnd;
     }
 
     reset() {
@@ -55,8 +57,7 @@ class Thrust {
         this.frame = requestAnimationFrame(this.onFrame);
 
         if (this.state == 'playing') {
-            const delta = this.clock.getDelta();
-            this.world.update(delta);
+            this.world.update(this.clock.getDelta());
         }
 
         this.renderer.draw();
@@ -64,7 +65,7 @@ class Thrust {
 
     onEnd() {
         this.pause();
-        //this.frame = cancelAnimationFrame(this.frame);
+        this.frame = cancelAnimationFrame(this.frame);
         this.state = 'gameover';
         this.title.setState(this.state);
         this.title.setVictoryMessages(this.players, this.world.rooms.distance);

@@ -24,8 +24,8 @@ class Renderer {
 
         this.map = new Map(this.world.rooms, this.world.getDistance(), this.scale, halfHeight);
         this.cameras = [
-            new TopCamera(this.canvas, this.map.canvas.element, this.world.players[0], this.scale, 0),
-            new BottomCamera(this.canvas, this.map.canvas.element, this.world.players[1], this.scale, halfHeight)
+            new TopCamera(this.canvas, this.map, this.world.players[0], this.scale, 0),
+            new BottomCamera(this.canvas, this.map, this.world.players[1], this.scale, halfHeight)
         ];
 
         this.minimap = new Minimap(this.world.getDistance(), width, height);

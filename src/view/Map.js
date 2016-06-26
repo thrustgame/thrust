@@ -6,7 +6,7 @@ class Map {
     constructor(corridor, distance, scale, height) {
         this.corridor = corridor;
         this.scale = scale;
-        this.canvas = new Canvas(distance * scale, 1);
+        this.width = Math.round(distance * scale);
 
         for (var i = this.corridor.rooms.length - 1; i >= 0; i--) {
             this.drawRoom(this.corridor.rooms[i]);
@@ -19,17 +19,23 @@ class Map {
      * @param {Room} room
      */
     drawRoom(room) {
-        const x = Math.round(room.start * this.scale);
-        const width = Math.round(room.size * this.scale);
+        const width = Math.ceil(room.size * this.scale);
 
-        this.canvas.setFill(room.color);
-        this.canvas.drawRect(x, 0, width, this.canvas.element.height);
+        room.view = new Canvas(width, 1);
+        room.mirror = new Canvas(width, 1);
+
+        room.view.setFill(room.color);
+        room.view.drawRect(0, 0, room.view.element.width, room.view.element.height);
 
         const wallSize = Math.ceil(baseWallSize * this.scale);
-        const wallX = Math.floor(x + width - wallSize);
+        const wallX = Math.floor(width - wallSize);
 
-        this.canvas.setFill(room.wallColor);
-        this.canvas.drawRect(wallX, 0, wallSize, this.canvas.element.height)
+        room.view.setFill(room.wallColor);
+        room.view.drawRect(wallX, 0, wallSize, room.view.element.height);
+
+        room.mirror.reverse();
+        room.mirror.drawImageTo(room.view.element, 0, 0);
+        room.mirror.reverse();
     }
 }
 
