@@ -1,13 +1,14 @@
 class PlayerController {
-    constructor(player, key) {
+    constructor(player, key, timeout) {
         this.player = player;
         this.key = key;
 
         this.onKeyDown = this.onKeyDown.bind(this);
         this.endThrust = this.endThrust.bind(this);
-        this.endCooldown = this.endCooldown.bind(this);
 
-        this.timeout = 500;
+        this.thrustTimeout;
+
+        this.timeout = timeout;
         this.cooldown = 0;
         this.listening = false;
 
@@ -16,18 +17,16 @@ class PlayerController {
 
     onKeyDown(event) {
         if (this.listening && event.keyCode == this.key) {
+            clearTimeout(this.thrustTimeout);
+
             this.listening = false;
             this.player.thrust();
-            setTimeout(this.endThrust, this.timeout);
+            this.thrustTimeout = setTimeout(this.endThrust, this.timeout);
         }
     }
 
     endThrust() {
         this.player.endThrust();
-        setTimeout(this.endCooldown, this.cooldown);
-    }
-
-    endCooldown() {
         this.listening = true;
     }
 }

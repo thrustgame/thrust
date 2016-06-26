@@ -10,11 +10,12 @@ class Player {
 
         this.position = Player.speed;
         this.speed = Player.speed;
-        this.maxSpeed = Player.speed * 2;
+        this.maxSpeed = Player.speed * 4;
         this.thrusting = false;
         this.wallEventListener = null;
+        this.allowDoubleThrust = true;
 
-        this.controller = new PlayerController(this, key);
+        this.controller = new PlayerController(this, key, this.allowDoubleThrust ? 400 : 500);
     }
 
     reset() {
@@ -33,6 +34,10 @@ class Player {
 
     increaseSpeed() {
         this.speed = Math.min(this.speed + Player.speed / 5, this.maxSpeed);
+
+        if (this.allowDoubleThrust) {
+            this.controller.listening = true;
+        }
     }
 
     resetSpeed() {
