@@ -28,8 +28,13 @@ class Camera {
 
         if (alterEgo) {
             const size = alterEgo.getSize();
-            this.canvas.drawImage(alterEgo.draw(), x - difference, y, size, size);
+            const aex = this.getAlterEgoPosition(x, difference);
+            this.canvas.drawImage(alterEgo.draw(), aex, y, size, size);
         }
+    }
+
+    getAlterEgoPosition(x, difference) {
+        return x + difference;
     }
 
     drawRoom(room) {
