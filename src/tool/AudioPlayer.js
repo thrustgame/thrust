@@ -2,7 +2,7 @@ class AudioPlayer {
     constructor() {
         window.AudioContext = window.AudioContext || window.webkitAudioContext;
 
-        this.enableMusic = false;
+        this.enableMusic = true;
 
         this.ostBuffer = null;
         this.audioSource = null;
