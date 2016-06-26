@@ -10,6 +10,7 @@ class Player {
 
         this.position = Player.speed;
         this.speed = Player.speed;
+        this.maxSpeed = Player.speed * 2;
         this.thrusting = false;
 
         this.controller = new PlayerController(this, key);
@@ -30,7 +31,7 @@ class Player {
     }
 
     increaseSpeed() {
-        this.speed += Player.speed / 5;
+        this.speed = Math.min(this.speed + Player.speed / 5, this.maxSpeed);
     }
 
     resetSpeed() {

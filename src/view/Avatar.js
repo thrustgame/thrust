@@ -12,9 +12,6 @@ class Avatar {
         this.idle = Avatar.createLozange('#FFFD1B', '#BCBB14', direction, 0.5, 0.75, 0.25);
 
         this.thrust = Avatar.createLozange('#F5DF0E', '#AB9B0A', direction, 0.25, 1, 0.25);
-
-        this.idle.debug();
-        this.thrust.debug();
     }
 
     static createFrames(color, colorDark, direction) {
@@ -66,25 +63,6 @@ class Avatar {
         }
 
         return canvas;
-    }
-
-    static _createLozange(color, colorDark, direction, height, body, head) {
-        const canvasWidth = 2;
-        const canvasHeight = 2;
-
-        const size = Avatar.radius * 1;
-        const canvas = new Canvas(size * canvasWidth, size * canvasHeight);
-        const context = canvas.context;
-
-        const fullLength = body + head;
-        const margin = { x: (canvasWidth - fullLength) / 2, y: (canvasHeight - height) / 2 };
-
-        const top = { x: margin.x  + body, y: margin.y };
-        const bottom = { x: top.x, y: top.y + height };
-        const left = { x: margin.x, y: canvasHeight / 2 };
-        const right = { x: canvasWidth - margin.x, y: left.y }
-
-        return Avatar.createLozangeFromCoordinates(color, colorDark, direction, top, right, bottom, left);
     }
 
     draw() {
