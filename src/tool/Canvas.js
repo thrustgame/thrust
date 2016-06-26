@@ -55,6 +55,13 @@ class Canvas {
         this.context.scale(-1, 1);
     };
 
+    toImage() {
+        const image = new Image();
+        image.src = this.toString();
+
+        return image;
+    }
+
     /**
      * To string
      *

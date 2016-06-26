@@ -1,11 +1,11 @@
 import Canvas from '../tool/Canvas.js';
 
-const radius = 10;
-
 /**
  * Minimap view
  */
 class Minimap {
+    static radius = 20;
+
     /**
      * Constructor
      *
@@ -17,9 +17,9 @@ class Minimap {
     constructor(distance, width, height, stage) {
         this.distance = distance;
         this.height = height;
-        this.halfHeight = Math.round(this.height / 2) - radius;
+        this.halfHeight = Math.round(this.height / 2) - Minimap.radius;
         this.scale = width / distance;
-        this.canvas = new Canvas(width, radius * 2);
+        this.canvas = new Canvas(width, Minimap.radius * 2);
     }
 
     /**
@@ -43,7 +43,7 @@ class Minimap {
     drawPlayer(canvas, avatar, direction) {
         const position = avatar.player.position;
         const ltr = (direction == 'left');
-        const width = radius * 2;
+        const width = Minimap.radius * 2;
         const x = (ltr ? position : this.distance - position) * this.scale + (ltr ? -width : 0);
         const color = ltr ? 0xFF00000 : 0x00FF00;
 
