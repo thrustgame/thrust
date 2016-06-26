@@ -1,20 +1,26 @@
 import AudioPlayer from '../tool/AudioPlayer.js'
 import ReadyCheck from '../engine/ReadyCheck.js'
+import Countdown from '../tool/Countdown.js'
 
 class Title {
     constructor(thrust) {
-        this.thrust = thrust;
+        // Methods bindings
         this.setVictoryMessages = this.setVictoryMessages.bind(this);
         this.startGame = this.startGame.bind(this);
         this.setState = this.setState.bind(this);
         this.toggleState = this.toggleState.bind(this);
         this.onKeyDown = this.onKeyDown.bind(this);
-        this.readyCheck = new ReadyCheck(this.startGame);
+        this.startCountdown = this.startCountdown.bind(this);
+
+        this.thrust = thrust;
+        this.countdown = new Countdown(400, this.startGame);
+        this.readyCheck = new ReadyCheck(this.startCountdown);
 
         this.overlays = {
             title: document.getElementById('title'),
+            countdown: document.getElementById('countdown'),
             pause: document.getElementById('pause'),
-            gameover: document.getElementById('gameover')
+            gameover: document.getElementById('gameover'),
         };
 
         this.audioPlayer = new AudioPlayer();
@@ -45,6 +51,11 @@ class Title {
         }
     }
 
+    startCountdown() {
+        this.setState('countdown');
+        this.countdown.start();
+    }
+
     startGame() {
         this.thrust.start();
         this.setState(this.thrust.state);
@@ -63,12 +74,16 @@ class Title {
 
     setState(state) {
         this.overlays.title.style.display = 'none';
+        this.overlays.countdown.style.display = 'none';
         this.overlays.pause.style.display = 'none';
         this.overlays.gameover.style.display = 'none';
 
         switch (state) {
             case 'title':
                 this.overlays.title.style.display = 'flex';
+                break;
+            case 'countdown':
+                this.overlays.countdown.style.display = 'flex';
                 break;
             case 'paused':
                 this.overlays.pause.style.display = 'flex';

@@ -19,7 +19,7 @@
             overflow: hidden;
         }
 
-        #pause, #gameover {
+        #pause, #gameover, #countdown {
             display: none;
         }
 
@@ -45,6 +45,10 @@
             margin-top: 0;
         }
 
+        #countdown h1 {
+            font-family: "Bungee Hairline", cursive;
+        }
+
         .overlay h2 {
             font-size: 1.5em;
             font-family: "Bungee Hairline", cursive;
@@ -62,6 +66,12 @@
             flex-direction: column;
             justify-content: center;
             top: 0;
+        }
+
+        #countdown .instructions {
+            width: 100%;
+            text-align: center;
+            left: 0;
         }
 
         .overlay .instructions p {
@@ -95,6 +105,14 @@
 </head>
 <body>
     <canvas id="canvas"></canvas>
+    <div id="countdown" class="overlay">
+        <div class="instructions player1">
+            <h1 id="player1-countdown">ready?</h1>
+        </div>
+        <div class="instructions player2">
+            <h1 id="player2-countdown">ready?</h1>
+        </div>
+    </div>
     <div id="title" class="overlay">
         <h1>Thrust</h1>
         <!-- <p class="blink">press space to start</p> -->
