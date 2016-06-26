@@ -8,17 +8,9 @@ class Map {
         this.scale = scale;
         this.width = Math.round(distance * scale);
 
-        console.log(
-            this.canvas.element.width,
-            this.canvas.element.height,
-            this.canvas.element.width * this.canvas.element.height
-        );
-
         for (var i = this.corridor.rooms.length - 1; i >= 0; i--) {
             this.drawRoom(this.corridor.rooms[i]);
         }
-
-        this.canvas.debug();
     }
 
     /**

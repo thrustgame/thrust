@@ -21,10 +21,13 @@ class World {
     }
 
     reset() {
-        this.rooms = new Corridor();
+        delete this.rooms;
+        delete this.players[0].track;
+        delete this.players[1].track;
 
-        new Track(this.players[0], this.rooms.getInverseWalls());
-        new Track(this.players[1], this.rooms.getWalls());
+        this.rooms = new Corridor();
+        this.players[0].track = new Track(this.rooms.getInverseWalls());
+        this.players[1].track = new Track(this.rooms.getWalls());
     }
 
     getDistance() {

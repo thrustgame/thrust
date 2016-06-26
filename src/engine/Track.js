@@ -1,9 +1,7 @@
 class Track {
-    constructor(player, walls) {
-        this.player = player;
+    constructor(walls) {
         this.walls = walls;
         this.index = 0;
-        player.track = this;
     }
 
     /**

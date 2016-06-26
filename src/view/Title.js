@@ -1,5 +1,5 @@
 import AudioPlayer from '../tool/AudioPlayer.js'
-import ReadyCheck from '../engine/ReadyCheck.js'
+import ReadyCheck from '../view/ReadyCheck.js'
 import Countdown from '../tool/Countdown.js'
 
 class Title {
@@ -11,11 +11,12 @@ class Title {
         this.toggleState = this.toggleState.bind(this);
         this.onKeyDown = this.onKeyDown.bind(this);
         this.startCountdown = this.startCountdown.bind(this);
+        this.reset = this.reset.bind(this);
 
         this.thrust = thrust;
         this.countdown = new Countdown(400, this.startGame);
-        this.readyCheck = new ReadyCheck(this.startCountdown);
-
+        this.readyCheck = new ReadyCheck(this.startCountdown, this.thrust.players);
+        this.audioPlayer = new AudioPlayer();
         this.overlays = {
             title: document.getElementById('title'),
             countdown: document.getElementById('countdown'),
@@ -23,25 +24,16 @@ class Title {
             gameover: document.getElementById('gameover'),
         };
 
-        this.audioPlayer = new AudioPlayer();
+        this.victoryElements = [
+            document.getElementById('player1-victory'),
+            document.getElementById('player2-victory'),
+        ];
 
-        document.body.addEventListener('keydown', this.onKeyDown)
+        window.addEventListener('keydown', this.onKeyDown);
     }
 
     onKeyDown(event) {
         switch (event.keyCode) {
-            case this.thrust.players[0].controller.key:
-                if (this.thrust.state == 'title') {
-                    this.readyCheck.setReady(0);
-                    document.getElementById('player1-ready').classList.remove('blink');
-                }
-                break;
-            case this.thrust.players[1].controller.key:
-                if (this.thrust.state == 'title') {
-                    this.readyCheck.setReady(1);
-                    document.getElementById('player2-ready').classList.remove('blink');
-                }
-                break;
             case 32:
                 this.toggleState();
                 break;
@@ -49,6 +41,14 @@ class Title {
                 this.audioPlayer.toggle();
                 break;
         }
+    }
+
+    reset() {
+        window.removeEventListener('keydown', this.reset);
+        window.removeEventListener('touchstart', this.reset);
+        this.readyCheck.reset();
+        this.thrust.reset();
+        this.setState('title');
     }
 
     startCountdown() {
@@ -62,14 +62,11 @@ class Title {
     }
 
     setVictoryMessages(players, distance) {
-        let p1 = document.getElementById('player1-victory');
-        let p2 = document.getElementById('player2-victory');
+        const p1percent = Math.floor(players[0].position / distance * 100);
+        const p2percent = 100 - p1percent;
 
-        let p1percent = Math.floor(players[0].position / distance * 100);
-        let p2percent = 100 - p1percent;
-
-        p1.innerText = p1percent + '%';
-        p2.innerText = p2percent + '%';
+        this.victoryElements[0].innerText = p1percent + '%';
+        this.victoryElements[1].innerText = p2percent + '%';
     }
 
     setState(state) {
@@ -90,6 +87,8 @@ class Title {
                 break;
             case 'gameover':
                 this.overlays.gameover.style.display = 'flex';
+                window.addEventListener('keydown', this.reset);
+                window.addEventListener('touchstart', this.reset);
                 break;
         }
     }
@@ -101,10 +100,6 @@ class Title {
                 break;
             case 'playing':
                 this.thrust.pause();
-                break;
-            case 'gameover':
-                this.thrust.reset();
-                this.thrust.start();
                 break;
         }
 

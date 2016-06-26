@@ -17,22 +17,27 @@ class Renderer {
 
         this.world = world;
         this.canvas = new Canvas(width, height, document.getElementById('canvas'));
-        this.fov = this.world.getDistance() / 20;
-        this.scale = width / this.fov;
+        this.reset();
+    }
 
-        console.log(width, this.fov, this.scale);
-
+    reset() {
+        const width = window.innerWidth;
+        const height = window.innerHeight;
         const halfHeight = Math.ceil(height / 2);
+        const distance = this.world.getDistance();
 
-        this.map = new Map(this.world.rooms, this.world.getDistance(), this.scale, halfHeight);
+        delete this.map;
+        delete this.minimap;
+        delete this.cameras;
+
+        this.fov = distance / 20;
+        this.scale = width / this.fov;
+        this.map = new Map(this.world.rooms, distance, this.scale, halfHeight);
+        this.minimap = new Minimap(distance, width, height);
         this.cameras = [
             new TopCamera(this.canvas, this.map, this.world.players[0], this.scale, 0),
             new BottomCamera(this.canvas, this.map, this.world.players[1], this.scale, halfHeight)
         ];
-
-        console.log(this.map);
-
-        this.minimap = new Minimap(this.world.getDistance(), width, height);
     }
 
     /**

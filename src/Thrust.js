@@ -16,7 +16,6 @@ class Thrust {
         const height = window.innerHeight;
 
         // Porperties
-        this.title = new Title(this);
         this.state = 'title';
         this.frame = null;
         this.clock = new Clock();
@@ -26,6 +25,7 @@ class Thrust {
         ];
         this.world = new World(this, this.players, this.onEnd);
         this.renderer = new Renderer(this.world);
+        this.title = new Title(this);
 
         this.onFrame();
 
@@ -34,12 +34,15 @@ class Thrust {
     }
 
     reset() {
-        window.location.reload();
+        this.players[0].reset();
+        this.players[1].reset();
+        this.world.reset();
+        this.renderer.reset();
     }
 
     start() {
-        this.players[0].controller.listening = true;
-        this.players[1].controller.listening = true;
+        this.players[0].ready = true;
+        this.players[1].ready = true;
         this.state = 'playing';
         this.clock.start();
         this.onFrame();
