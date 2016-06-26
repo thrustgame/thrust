@@ -11,7 +11,10 @@ class Camera {
     }
 
     draw(alterEgo = null, difference = 0) {
-        const { x, y, size } = this.updateAvatar();
+        const size = this.avatar.getSize();
+        const x = Math.round(this.centerX - size / 2);
+        const y = Math.round(this.centerY - size / 2);
+
         const { start, end } = this.getViewPort();
 
         for (let  i = this.map.corridor.rooms.length - 1; i >= 0; i--) {
@@ -24,13 +27,9 @@ class Camera {
         this.canvas.drawImage(this.avatar.draw(), x, y, size, size);
 
         if (alterEgo) {
-            const aex = this.getAlterEgoPosition(x, size, difference);
-            this.canvas.drawImage(alterEgo.draw(), aex, y, size, size);
+            const size = alterEgo.getSize();
+            this.canvas.drawImage(alterEgo.draw(), x - difference, y, size, size);
         }
-    }
-
-    getAlterEgoPosition(x, size, difference) {
-        return x + size + difference;
     }
 
     drawRoom(room) {

@@ -1,14 +1,18 @@
 import Camera from './Camera.js';
-import Avatar from './Avatar.js';
-import Player from '../engine/Player.js';
 
 class TopCamera extends Camera {
 
+    constructor(canvas, map, player, scale, y) {
+        super(canvas, map, player, scale, y);
+
+        this.centerX = canvas.element.width * 3 / 4;
+        this.centerY = canvas.element.height / 4;
+    }
+
     translate(x) {
-        const margin = this.canvas.element.width * 3 / 4;
         const position = this.map.corridor.distance - this.player.position;
 
-        return Math.round(margin + (x - position) * this.scale);
+        return Math.round(this.centerX + (x - position) * this.scale);
     }
 
     getViewPort() {
@@ -21,24 +25,8 @@ class TopCamera extends Camera {
         };
     }
 
-    updateAvatar() {
-        const margin = this.canvas.element.height / 4;
-        const screenHalfWidth = this.canvas.element.width * 3 / 4;
-        const avatar = {};
-
-        avatar.size = Avatar.radius * this.avatar.player.speed / Player.speed;
-        avatar.x = Math.round(screenHalfWidth);
-        avatar.y = Math.round(margin - avatar.size / 2);
-
-        return avatar;
-    }
-
     getView(room) {
         return room.mirror.element;
-    }
-
-    getAlterEgoPosition(x, size, difference) {
-        return x - size - difference;
     }
 }
 

@@ -1,6 +1,7 @@
 import Canvas from '../tool/Canvas.js';
 import Animation from './Animation/Animation.js';
 import Frame from './Animation/Frame.js';
+import Player from '../engine/Player.js';
 
 class Avatar {
 
@@ -88,6 +89,14 @@ class Avatar {
 
     draw() {
         return this.player.thrusting ? this.thrust.element : this.idle.element;
+    }
+
+    getSize() {
+        return Avatar.radius;
+
+        const ratio = this.player.speed / Player.speed;
+
+        return Avatar.radius * ratio;
     }
 }
 

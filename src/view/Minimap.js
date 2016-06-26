@@ -44,7 +44,7 @@ class Minimap {
         const position = avatar.player.position;
         const ltr = (direction == 'left');
         const width = Minimap.radius * 2;
-        const x = (ltr ? position : this.distance - position) * this.scale + (ltr ? -width : 0);
+        const x = (ltr ? position : this.distance - position) * this.scale - width / 2;
         const color = ltr ? 0xFF00000 : 0x00FF00;
 
         canvas.drawImage(avatar.draw(), x, this.halfHeight, width, width);
