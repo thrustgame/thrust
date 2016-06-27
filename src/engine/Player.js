@@ -33,7 +33,7 @@ class Player {
     thrust() {
         if (this.ready) {
             clearTimeout(this.thrustTimeout);
-            const time = Player.thrustDuration / (this.speed / Player.speed);
+            const time = Player.thrustDuration / this.getSpeedRatio();
             this.thrusting = true;
             this.ready = false;
             this.thrustTimeout = setTimeout(this.endThrust, time);
