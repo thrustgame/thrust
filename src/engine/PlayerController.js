@@ -1,37 +1,81 @@
 import Player from './Player.js';
 
 class PlayerController {
-    constructor(player, key, timeout) {
-        this.player = player;
+
+    constructor(key, zone) {
         this.key = key;
+        this.zone = zone;
+        this.listeners = [];
 
         this.onKeyDown = this.onKeyDown.bind(this);
-        this.endThrust = this.endThrust.bind(this);
+        this.onTouch = this.onTouch.bind(this);
+        this.onAction = this.onAction.bind(this);
 
-        this.thrustTimeout;
-
-        this.timeout = timeout;
-        this.cooldown = 0;
-        this.listening = false;
-
-        document.body.addEventListener('keydown', this.onKeyDown);
+        window.addEventListener('keydown', this.onKeyDown, false);
+        window.addEventListener('touchstart', this.onTouch, false);
     }
 
+    /**
+     * On key down
+     *
+     * @param {Event} event
+     */
     onKeyDown(event) {
-        if (this.listening && event.keyCode == this.key) {
-            clearTimeout(this.thrustTimeout);
-
-            const time = this.timeout / (this.player.speed / Player.speed);
-
-            this.listening = false;
-            this.player.thrust();
-            this.thrustTimeout = setTimeout(this.endThrust, time);
+        if (event.keyCode == this.key) {
+            this.onAction();
         }
     }
 
-    endThrust() {
-        this.player.endThrust();
-        this.listening = true;
+    /**
+     * On touch
+     *
+     * @param {Event} event
+     */
+    onTouch(event) {
+        event.preventDefault();
+
+        for (let i = event.changedTouches.length - 1; i >= 0; i--) {
+            let touch = event.changedTouches[i].clientY;
+
+            if (touch >= this.zone.start && touch <= this.zone.end) {
+                return this.onAction();
+            }
+        }
+    }
+
+    /**
+     * On action
+     */
+    onAction() {
+        const length = this.listeners.length;
+
+        for (var i = 0; i < length; i++) {
+            this.listeners[i]();
+        }
+    }
+
+    /**
+     * Add action listener
+     *
+     * @param {Function} callback
+     */
+    addActionListener(callback) {
+        if (this.listeners.indexOf(callback) < 0) {
+            this.listeners.push(callback);
+        }
+    }
+
+    /**
+     * Remove action listener
+     *
+     * @param {Function} callback
+     */
+    removeActionListener(callback) {
+        const index = this.listeners.indexOf(callback);
+
+        if (index >= 0) {
+            this.listeners.splice(index, 1);
+        }
     }
 }
 

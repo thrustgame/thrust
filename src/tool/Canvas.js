@@ -18,6 +18,10 @@ class Canvas {
         this.context.fillStyle = color;
     }
 
+    setAlpha(alpha) {
+        this.context.globalAlpha = alpha;
+    }
+
     clear() {
         this.context.clearRect(0, 0, this.element.width, this.element.height);
     }
@@ -71,6 +75,11 @@ class Canvas {
         return this.element.toDataURL();
     }
 
+    /**
+     * Debug canvas content
+     *
+     * @param {Boolean} image
+     */
     debug(image = false) {
         const data = this.toString();
 
