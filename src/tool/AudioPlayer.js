@@ -20,7 +20,7 @@ class AudioPlayer {
 
     load(done) {
         let request = new XMLHttpRequest();
-        request.open('GET', '/ost/title.ogg');
+        request.open('GET', 'ost/title.ogg');
         request.responseType = 'arraybuffer';
 
         request.onload = function() {
