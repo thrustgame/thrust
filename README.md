@@ -10,7 +10,7 @@ by Geoffrey Bachelet and Thomas Jarrand.
 
 ## Credits
 
-OST:
+OST: [Jumper by Killo-Gram](https://www.jamendo.com/track/1350213/jumper)
 
 ## Installation
 
