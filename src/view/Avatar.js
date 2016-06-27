@@ -98,11 +98,7 @@ class Avatar {
     }
 
     getSize() {
-        // return Avatar.radius;
-
-        const ratio = this.player.speed / Player.speed;
-
-        return Avatar.radius * ratio;
+        return Avatar.radius * this.player.getSpeedRatio();
     }
 }
 
