@@ -14,17 +14,17 @@ class Camera {
         const size = this.avatar.getSize();
         const x = Math.round(this.centerX - size / 2);
         const y = Math.round(this.centerY - size / 2);
-        const shadow = Avatar.radius * 0.1;
+        const sun = this.getSunDirection();
+        const shadow = sun * this.avatar.getDropShadow();
         const shake = this.avatar.getShake();
         const { start, end } = this.getViewPort();
-        let aesize;
-        let aex;
-        let aey;
+        let aesize, aex, aey, aeshadow;
 
         if (alterEgo) {
             aesize = alterEgo.getSize();
             aex = this.getAlterEgoPosition(x, difference);
             aey = Math.round(this.centerY - aesize / 2);
+            aeshadow = sun * alterEgo.getDropShadow();
         }
 
         for (let  i = this.map.corridor.rooms.length - 1; i >= 0; i--) {
@@ -37,13 +37,13 @@ class Camera {
         this.canvas.drawImage(this.avatar.drawShadow(), x + shake, y + shadow, size, size);
 
         if (alterEgo) {
-            this.canvas.drawImage(alterEgo.drawShadow(), aex, aey + shadow, aesize, aesize);
+            this.canvas.drawImage(alterEgo.drawShadow(), aex + shake, aey + aeshadow, aesize, aesize);
         }
 
         this.canvas.drawImage(this.avatar.draw(), x + shake, y, size, size);
 
         if (alterEgo) {
-            this.canvas.drawImage(alterEgo.draw(), aex, aey, aesize, aesize);
+            this.canvas.drawImage(alterEgo.draw(), aex + shake, aey, aesize, aesize);
         }
     }
 
@@ -51,7 +51,7 @@ class Camera {
         return x + difference;
     }
 
-    drawRoom(room) {
+    drawRoom(room, shake) {
         this.canvas.drawImage(
             this.getView(room),
             this.translate(room.start),
@@ -63,6 +63,10 @@ class Camera {
 
     getView(room) {
         return room.view.element;
+    }
+
+    getSunDirection() {
+        return 1;
     }
 }
 

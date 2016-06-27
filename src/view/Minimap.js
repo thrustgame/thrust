@@ -4,7 +4,7 @@ import Canvas from '../tool/Canvas.js';
  * Minimap view
  */
 class Minimap {
-    static radius = 20;
+    static radius = 50;
 
     /**
      * Constructor

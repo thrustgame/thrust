@@ -6,6 +6,9 @@ import Player from '../engine/Player.js';
 import Canvas from '../tool/Canvas.js';
 
 class Renderer {
+
+    static fov = 60;
+
     /**
      * Constructor
      *
@@ -32,7 +35,7 @@ class Renderer {
         delete this.minimap;
         delete this.cameras;
 
-        this.fov = distance / 20;
+        this.fov = Math.round(distance / Renderer.fov);
         this.scale = width / this.fov;
         this.map = new Map(this.world.rooms, distance, this.scale, halfHeight);
         this.minimap = new Minimap(distance, width, height);

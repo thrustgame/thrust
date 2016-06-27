@@ -6,14 +6,18 @@ class Room {
         ['#5B52B8', '#45407E'],
     ];
 
-    constructor(id, start, end) {
+    static size = 400;
+
+    static wallSize = 0.05;
+
+    constructor(id, start, size) {
         const colors = Room.colors[id % Room.colors.length];
 
         this.id = id;
         this.start = start;
-        this.end = end;
-        this.size = this.end - this.start;
-        this.wall = this.end - (this.size * 0.1);
+        this.size = size;
+        this.end = start + size;
+        this.wall = this.end - (this.size * Room.wallSize);
         this.color = colors[0];
         this.wallColor = colors[1];
         this.view = null;
@@ -22,6 +26,10 @@ class Room {
 
     match(start, end) {
         return this.start < end && this.end > start;
+    }
+
+    static getRandomSize() {
+        return Room.size * (1 + (Math.random() - 0.5) / 2);
     }
 }
 

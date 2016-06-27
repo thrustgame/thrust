@@ -32,6 +32,10 @@ class TopCamera extends Camera {
     getView(room) {
         return room.mirror.element;
     }
+
+    getSunDirection() {
+        return -1;
+    }
 }
 
 export default TopCamera;

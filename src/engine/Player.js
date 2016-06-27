@@ -1,8 +1,11 @@
 import PlayerController from './PlayerController';
+import Room from './Room.js';
 
 class Player {
 
     static speed = 300;
+    static speedStep = Player.speed / 5;
+    static maxSpeed = Player.speed * 4;
 
     static thrustDuration = 350;
 
@@ -10,9 +13,8 @@ class Player {
         this.thrust = this.thrust.bind(this);
         this.endThrust = this.endThrust.bind(this);
 
-        this.position = Player.speed;
+        this.position = 0;
         this.speed = Player.speed;
-        this.maxSpeed = Player.speed * 4;
         this.thrusting = false;
         this.ready = false;
         this.thrustTimeout = null;
@@ -24,7 +26,7 @@ class Player {
 
     reset() {
         clearTimeout(this.thrustTimeout);
-        this.position = Player.speed;
+        this.position = 0;
         this.speed = Player.speed;
         this.thrusting = false;
         this.ready = false;
@@ -46,12 +48,12 @@ class Player {
     }
 
     increaseSpeed() {
-        this.speed = Math.min(this.speed + Player.speed / 5, this.maxSpeed);
+        this.speed = Math.min(this.speed + Player.speedStep, Player.maxSpeed);
         this.ready = true;
     }
 
     resetSpeed() {
-        this.speed = Player.speed;
+        this.speed = Math.max(this.speed / 2, Player.speed);
 
         if (this.wallEventListener) {
             this.wallEventListener();

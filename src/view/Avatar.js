@@ -5,7 +5,7 @@ import Player from '../engine/Player.js';
 
 class Avatar {
 
-    static radius = 200;
+    static radius = 360;
 
     static shakeTime = 300;
 
@@ -93,7 +93,7 @@ class Avatar {
 
         const time = (Date.now() - this.shake) / Avatar.shakeTime * 4 * Math.PI;
 
-        return Math.cos(time) * Avatar.radius / 50;
+        return Math.cos(time) * Avatar.radius / 25;
     }
 
     draw() {
@@ -108,6 +108,10 @@ class Avatar {
         const ratio = 1 + (this.player.getSpeedRatio() - 1) * 0.5;
 
         return Avatar.radius * ratio;
+    }
+
+    getDropShadow() {
+        return Avatar.radius * 0.1;
     }
 }
 
