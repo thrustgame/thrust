@@ -24,15 +24,16 @@ class Map {
         room.view = new Canvas(width, 1);
         room.mirror = new Canvas(width, 1);
 
+        // Draw the room;
         room.view.setFill(room.color);
         room.view.drawRect(0, 0, room.view.element.width, room.view.element.height);
 
+        // Draw the wall
         const wallSize = Math.ceil(baseWallSize * this.scale);
-        const wallX = Math.floor(width - wallSize);
-
         room.view.setFill(room.wallColor);
-        room.view.drawRect(wallX, 0, wallSize, room.view.element.height);
+        room.view.drawRect(0, 0, wallSize, room.view.element.height);
 
+        // Draw the reverse view for top lane
         room.mirror.reverse();
         room.mirror.drawImageTo(room.view.element, 0, 0);
         room.mirror.reverse();
