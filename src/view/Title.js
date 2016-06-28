@@ -11,6 +11,7 @@ class Title {
         this.toggleState = this.toggleState.bind(this);
         this.onKeyDown = this.onKeyDown.bind(this);
         this.startCountdown = this.startCountdown.bind(this);
+        this.offerReset = this.offerReset.bind(this);
         this.reset = this.reset.bind(this);
 
         this.thrust = thrust;
@@ -87,10 +88,14 @@ class Title {
                 break;
             case 'gameover':
                 this.overlays.gameover.style.display = 'flex';
-                window.addEventListener('keydown', this.reset);
-                window.addEventListener('touchstart', this.reset);
+                setTimeout(this.offerReset, 1000);
                 break;
         }
+    }
+
+    offerReset() {
+        window.addEventListener('keydown', this.reset);
+        window.addEventListener('touchstart', this.reset);
     }
 
     toggleState() {

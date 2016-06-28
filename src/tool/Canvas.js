@@ -26,10 +26,6 @@ class Canvas {
         this.context.clearRect(0, 0, this.element.width, this.element.height);
     }
 
-    clearZone(x, y, width, height) {
-        this.context.clearRect(x, y, width, height);
-    }
-
     color(color) {
         this.context.fillStyle = color;
         this.context.fillRect(0, 0, this.element.width, this.element.height);
@@ -75,20 +71,24 @@ class Canvas {
         return this.element.toDataURL();
     }
 
+    toImage() {
+        const image = new Image();
+
+        image.src = this.toString();
+
+        return image;
+    }
+
     /**
      * Debug canvas content
      *
      * @param {Boolean} image
      */
     debug(image = false) {
-        const data = this.toString();
-
         if (image) {
-            const image = new Image();
-            image.src = data;
-            document.body.appendChild(image);
+            document.body.appendChild(this.toImage());
         } else {
-            console.info(data);
+            console.info(this.toString());
         }
     }
 }

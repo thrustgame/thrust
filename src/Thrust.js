@@ -30,9 +30,6 @@ class Thrust {
         this.setPlayersPosition();
 
         this.onFrame();
-
-        window.addEventListener('error', this.onEnd);
-        window.onError = this.onEnd;
     }
 
     reset() {
@@ -75,11 +72,16 @@ class Thrust {
     onFrame() {
         this.frame = requestAnimationFrame(this.onFrame);
 
-        if (this.state == 'playing') {
-            this.world.update(this.clock.getDelta());
-        }
+        try {
+            if (this.state == 'playing') {
+                this.world.update(this.clock.getDelta());
+            }
 
-        this.renderer.draw();
+            this.renderer.draw();
+        } catch(e) {
+            this.onEnd();
+            throw e;
+        }
     }
 
     onEnd() {

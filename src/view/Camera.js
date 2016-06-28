@@ -2,29 +2,30 @@ import Avatar from './Avatar.js';
 
 class Camera {
     constructor(canvas, map, player, scale, y) {
-        this.y = y;
+        this.y = Math.ceil(y);
         this.scale = scale;
         this.map = map;
         this.canvas = canvas;
         this.player = player;
         this.avatar = new Avatar(player, y === 0);
+        this.halfHeight = Math.round(this.canvas.element.height / 2);
     }
 
     draw(alterEgo = null, difference = 0) {
-        const size = this.avatar.getSize();
+        const size = Math.round(this.avatar.getSize());
         const x = Math.round(this.centerX - size / 2);
         const y = Math.round(this.centerY - size / 2);
         const sun = this.getSunDirection();
-        const shadow = sun * this.avatar.getDropShadow();
-        const shake = this.avatar.getShake();
+        const shadow = Math.round(sun * this.avatar.getDropShadow());
+        const shake = Math.round(this.avatar.getShake());
         const { start, end } = this.getViewPort();
         let aesize, aex, aey, aeshadow;
 
         if (alterEgo) {
-            aesize = alterEgo.getSize();
-            aex = this.getAlterEgoPosition(x, difference);
+            aesize = Math.round(alterEgo.getSize());
+            aex = Math.round(this.getAlterEgoPosition(x, difference));
             aey = Math.round(this.centerY - aesize / 2);
-            aeshadow = sun * alterEgo.getDropShadow();
+            aeshadow = Math.round(sun * alterEgo.getDropShadow());
         }
 
         for (let  i = this.map.corridor.rooms.length - 1; i >= 0; i--) {
@@ -51,18 +52,22 @@ class Camera {
         return x + difference;
     }
 
-    drawRoom(room, shake) {
+    drawRoom(room) {
+        if (!room.scaledSize) {
+            room.scaledSize = Math.ceil(room.size * this.scale);
+        }
+
         this.canvas.drawImage(
             this.getView(room),
-            this.translate(room.start),
+            Math.round(this.translate(room.start)),
             this.y,
-            room.view.element.width,
-            this.canvas.element.height / 2
+            room.scaledSize,
+            this.halfHeight
         );
     }
 
     getView(room) {
-        return room.view.element;
+        return room.view;
     }
 
     getSunDirection() {

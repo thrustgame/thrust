@@ -7,18 +7,23 @@ class BottomCamera extends Camera {
 
         this.centerX = canvas.element.width / 4;
         this.centerY = canvas.element.height * 3 / 4;
+
+        const margin = this.centerX / this.scale;
+
+        this.marginLeft = - Math.floor(margin);
+        this.marginRight = Math.floor(margin * 3);
     }
 
     translate(x) {
-        return Math.round(this.centerX + (x - this.player.position) * this.scale);
+        return this.centerX + (x - this.player.position) * this.scale;
     }
 
     getViewPort() {
         const margin = this.centerX / this.scale;
 
         return {
-            start: this.player.position - Math.floor(margin),
-            end: this.player.position + Math.floor(margin * 3),
+            start: this.player.position + this.marginLeft,
+            end: this.player.position + this.marginRight,
         };
     }
 }

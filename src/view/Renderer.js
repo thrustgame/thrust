@@ -15,8 +15,8 @@ class Renderer {
      * @param {World} world
      */
     constructor(world) {
-        const width = window.innerWidth * devicePixelRatio;
-        const height = window.innerHeight * devicePixelRatio;
+        const width = window.innerWidth/* * devicePixelRatio*/;
+        const height = window.innerHeight/* * devicePixelRatio*/;
 
         this.world = world;
         this.canvas = new Canvas(width, height, document.getElementById('canvas'));

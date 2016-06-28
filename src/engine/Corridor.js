@@ -3,7 +3,7 @@ import Wall from './Wall.js';
 
 class Corridor {
 
-    constructor(length = 100) {
+    constructor(length = 80) {
         this.rooms = [];
         this.distance = 0;
 
