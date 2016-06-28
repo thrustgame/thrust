@@ -1,5 +1,7 @@
 # THRUST
 
+[Play THRUST](https://thrustgame.github.io/thrust) (you'll need a friend to play!)
+
 ![](logo.png)
 
 ## About
