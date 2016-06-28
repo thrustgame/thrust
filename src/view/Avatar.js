@@ -107,7 +107,7 @@ class Avatar {
     getSize() {
         const ratio = 1 + (this.player.getSpeedRatio() - 1) * 0.5;
 
-        return Avatar.radius * ratio;
+        return Avatar.radius / devicePixelRatio * ratio;
     }
 
     getDropShadow() {
