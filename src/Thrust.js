@@ -1,6 +1,7 @@
 import Clock from './tool/Clock.js';
 import World from './engine/World.js';
 import Player from './engine/Player.js';
+import Room from './engine/Room.js';
 import Renderer from './view/Renderer.js';
 import Title from './view/Title.js';
 
@@ -26,11 +27,9 @@ class Thrust {
         this.world = new World(this, this.players, this.onEnd);
         this.renderer = new Renderer(this.world);
         this.title = new Title(this);
+        this.setPlayersPosition();
 
         this.onFrame();
-
-        window.addEventListener('error', this.onEnd);
-        window.onError = this.onEnd;
     }
 
     reset() {
@@ -38,6 +37,7 @@ class Thrust {
         this.players[1].reset();
         this.world.reset();
         this.renderer.reset();
+        this.setPlayersPosition();
     }
 
     start() {
@@ -58,17 +58,30 @@ class Thrust {
         this.clock.stop();
     }
 
+    setPlayersPosition() {
+        const x = this.renderer.cameras[1].centerX;
+        const wall = this.world.rooms.rooms[0].size * Room.wallSize;
+        const margin = Math.ceil(x / this.renderer.scale + wall);
+        this.world.players[0].position = margin;
+        this.world.players[1].position = margin;
+    }
+
     /**
      * On frame
      */
     onFrame() {
         this.frame = requestAnimationFrame(this.onFrame);
 
-        if (this.state == 'playing') {
-            this.world.update(this.clock.getDelta());
-        }
+        try {
+            if (this.state == 'playing') {
+                this.world.update(this.clock.getDelta());
+            }
 
-        this.renderer.draw();
+            this.renderer.draw();
+        } catch(e) {
+            this.onEnd();
+            throw e;
+        }
     }
 
     onEnd() {

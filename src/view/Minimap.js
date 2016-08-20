@@ -4,7 +4,7 @@ import Canvas from '../tool/Canvas.js';
  * Minimap view
  */
 class Minimap {
-    static radius = 20;
+    static radius = 50;
 
     /**
      * Constructor
@@ -47,7 +47,7 @@ class Minimap {
         const x = (ltr ? position : this.distance - position) * this.scale - width / 2;
         const color = ltr ? 0xFF00000 : 0x00FF00;
 
-        canvas.drawImage(avatar.draw(), x, this.halfHeight, width, width);
+        canvas.drawImage(avatar.draw(), Math.round(x), this.halfHeight, width, width);
     }
 }
 

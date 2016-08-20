@@ -5,14 +5,16 @@ import Player from '../engine/Player.js';
 
 class Avatar {
 
-    static radius = 200;
+    static radius = 360;
 
     static shakeTime = 300;
 
     constructor(player, direction) {
         this.player = player;
-        this.idle = Avatar.createLozange('#FFFD1B', '#BCBB14', direction, 0.5, 0.75, 0.25);
-        this.thrust = Avatar.createLozange('#F5DF0E', '#AB9B0A', direction, 0.25, 1, 0.25);
+        this.idle = Avatar.createLozange('#FFFD1B', '#BCBB14', 1, direction, 0.5, 0.75, 0.25);
+        this.idleShadow = Avatar.createLozange('#000000', '#000000', 0.1, direction, 0.5, 0.75, 0.25);
+        this.thrust = Avatar.createLozange('#F5DF0E', '#AB9B0A', 1, direction, 0.25, 1, 0.25);
+        this.thrustShadow = Avatar.createLozange('#000000', '#000000', 0.1, direction, 0.25, 1, 0.25);
         this.shake = 0;
         this.shakeTimout = null;
 
@@ -31,11 +33,11 @@ class Avatar {
         ];
     }
 
-    static createLozange(color, colorDark, direction, height, body, head) {
+    static createLozange(color, colorDark, alpha, direction, height, body, head) {
         const canvasWidth = 2;
         const canvasHeight = 2;
 
-        const size = Avatar.radius * 1;
+        const size = Avatar.radius * 2;
         const canvas = new Canvas(size * canvasWidth, size * canvasHeight);
         const context = canvas.context;
 
@@ -51,6 +53,7 @@ class Avatar {
         }
 
         context.scale(size, size);
+        canvas.setAlpha(alpha);
 
         canvas.setFill(color);
         context.beginPath();
@@ -90,15 +93,25 @@ class Avatar {
 
         const time = (Date.now() - this.shake) / Avatar.shakeTime * 4 * Math.PI;
 
-        return Math.cos(time) * Avatar.radius / 50;
+        return Math.cos(time) * Avatar.radius / 25;
     }
 
     draw() {
         return this.player.thrusting ? this.thrust.element : this.idle.element;
     }
 
+    drawShadow() {
+        return this.player.thrusting ? this.thrustShadow.element : this.idleShadow.element;
+    }
+
     getSize() {
-        return Avatar.radius * this.player.getSpeedRatio();
+        const ratio = 1 + (this.player.getSpeedRatio() - 1) * 0.5;
+
+        return Avatar.radius / devicePixelRatio * ratio;
+    }
+
+    getDropShadow() {
+        return Avatar.radius * 0.1;
     }
 }
 
