@@ -19,6 +19,10 @@ var _Player = require('./engine/Player.js');
 
 var _Player2 = _interopRequireDefault(_Player);
 
+var _Room = require('./engine/Room.js');
+
+var _Room2 = _interopRequireDefault(_Room);
+
 var _Renderer = require('./view/Renderer.js');
 
 var _Renderer2 = _interopRequireDefault(_Renderer);
@@ -35,7 +39,6 @@ var Thrust = function () {
     /**
      * Constructor
      */
-
     function Thrust() {
         _classCallCheck(this, Thrust);
 
@@ -53,11 +56,9 @@ var Thrust = function () {
         this.world = new _World2.default(this, this.players, this.onEnd);
         this.renderer = new _Renderer2.default(this.world);
         this.title = new _Title2.default(this);
+        this.setPlayersPosition();
 
         this.onFrame();
-
-        window.addEventListener('error', this.onEnd);
-        window.onError = this.onEnd;
     }
 
     _createClass(Thrust, [{
@@ -67,6 +68,7 @@ var Thrust = function () {
             this.players[1].reset();
             this.world.reset();
             this.renderer.reset();
+            this.setPlayersPosition();
         }
     }, {
         key: 'start',
@@ -89,6 +91,15 @@ var Thrust = function () {
             this.state = 'gameover';
             this.clock.stop();
         }
+    }, {
+        key: 'setPlayersPosition',
+        value: function setPlayersPosition() {
+            var x = this.renderer.cameras[1].centerX;
+            var wall = this.world.rooms.rooms[0].size * _Room2.default.wallSize;
+            var margin = Math.ceil(x / this.renderer.scale + wall);
+            this.world.players[0].position = margin;
+            this.world.players[1].position = margin;
+        }
 
         /**
          * On frame
@@ -99,11 +110,16 @@ var Thrust = function () {
         value: function onFrame() {
             this.frame = requestAnimationFrame(this.onFrame);
 
-            if (this.state == 'playing') {
-                this.world.update(this.clock.getDelta());
-            }
+            try {
+                if (this.state == 'playing') {
+                    this.world.update(this.clock.getDelta());
+                }
 
-            this.renderer.draw();
+                this.renderer.draw();
+            } catch (e) {
+                this.onEnd();
+                throw e;
+            }
         }
     }, {
         key: 'onEnd',
@@ -121,7 +137,7 @@ var Thrust = function () {
 
 exports.default = Thrust;
 
-},{"./engine/Player.js":3,"./engine/World.js":8,"./tool/Clock.js":12,"./view/Renderer.js":22,"./view/Title.js":23}],2:[function(require,module,exports){
+},{"./engine/Player.js":3,"./engine/Room.js":5,"./engine/World.js":8,"./tool/Clock.js":12,"./view/Renderer.js":22,"./view/Title.js":23}],2:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -144,20 +160,18 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 var Corridor = function () {
     function Corridor() {
-        var length = arguments.length <= 0 || arguments[0] === undefined ? 50 : arguments[0];
+        var length = arguments.length <= 0 || arguments[0] === undefined ? 80 : arguments[0];
 
         _classCallCheck(this, Corridor);
 
         this.rooms = [];
         this.distance = 0;
 
-        this.addRoom(Corridor.roomSize * 2);
-
+        this.addRoom(_Room2.default.size * 1.3);
         for (var i = 0; i < length; i++) {
             this.addRoom();
         }
-
-        this.addRoom(Corridor.roomSize * 2);
+        this.addRoom(_Room2.default.size * 1.3);
     }
 
     _createClass(Corridor, [{
@@ -167,9 +181,9 @@ var Corridor = function () {
 
             var length = this.rooms.length;
             var start = length ? this.rooms[length - 1].end : 0;
-            var size = forceSize ? forceSize : Math.round(Corridor.roomSize * (1 + (Math.random() - 0.3)));
+            var size = Math.round(forceSize ? forceSize : _Room2.default.getRandomSize());
 
-            this.rooms.push(new _Room2.default(length, start, start + size));
+            this.rooms.push(new _Room2.default(length, start, size));
             this.distance += size;
         }
     }, {
@@ -203,7 +217,6 @@ var Corridor = function () {
     return Corridor;
 }();
 
-Corridor.roomSize = 300;
 exports.default = Corridor;
 
 },{"./Room.js":5,"./Wall.js":7}],3:[function(require,module,exports){
@@ -219,6 +232,10 @@ var _PlayerController = require('./PlayerController');
 
 var _PlayerController2 = _interopRequireDefault(_PlayerController);
 
+var _Room = require('./Room.js');
+
+var _Room2 = _interopRequireDefault(_Room);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -230,9 +247,8 @@ var Player = function () {
         this.thrust = this.thrust.bind(this);
         this.endThrust = this.endThrust.bind(this);
 
-        this.position = Player.speed;
+        this.position = 0;
         this.speed = Player.speed;
-        this.maxSpeed = Player.speed * 4;
         this.thrusting = false;
         this.ready = false;
         this.thrustTimeout = null;
@@ -246,7 +262,7 @@ var Player = function () {
         key: 'reset',
         value: function reset() {
             clearTimeout(this.thrustTimeout);
-            this.position = Player.speed;
+            this.position = 0;
             this.speed = Player.speed;
             this.thrusting = false;
             this.ready = false;
@@ -271,13 +287,13 @@ var Player = function () {
     }, {
         key: 'increaseSpeed',
         value: function increaseSpeed() {
-            this.speed = Math.min(this.speed + Player.speed / 5, this.maxSpeed);
+            this.speed = Math.min(this.speed + Player.speedStep, Player.maxSpeed);
             this.ready = true;
         }
     }, {
         key: 'resetSpeed',
         value: function resetSpeed() {
-            this.speed = Player.speed;
+            this.speed = Math.max(this.speed / 2, Player.speed);
 
             if (this.wallEventListener) {
                 this.wallEventListener();
@@ -306,10 +322,12 @@ var Player = function () {
 }();
 
 Player.speed = 300;
+Player.speedStep = Player.speed / 5;
+Player.maxSpeed = Player.speed * 4;
 Player.thrustDuration = 350;
 exports.default = Player;
 
-},{"./PlayerController":4}],4:[function(require,module,exports){
+},{"./PlayerController":4,"./Room.js":5}],4:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -439,16 +457,16 @@ var _createClass = function () { function defineProperties(target, props) { for 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var Room = function () {
-    function Room(id, start, end) {
+    function Room(id, start, size) {
         _classCallCheck(this, Room);
 
         var colors = Room.colors[id % Room.colors.length];
 
         this.id = id;
         this.start = start;
-        this.end = end;
-        this.size = this.end - this.start;
-        this.wall = this.end - this.size * 0.1;
+        this.size = size;
+        this.end = start + size;
+        this.wall = this.end - this.size * Room.wallSize;
         this.color = colors[0];
         this.wallColor = colors[1];
         this.view = null;
@@ -460,12 +478,19 @@ var Room = function () {
         value: function match(start, end) {
             return this.start < end && this.end > start;
         }
+    }], [{
+        key: 'getRandomSize',
+        value: function getRandomSize() {
+            return Room.size * (1 + (Math.random() - 0.5) / 2);
+        }
     }]);
 
     return Room;
 }();
 
 Room.colors = [['#D64F9E', '#9C4377'], ['#5BD3F0', '#50A2B6'], ['#5B52B8', '#45407E']];
+Room.size = 400;
+Room.wallSize = 0.05;
 exports.default = Room;
 
 },{}],6:[function(require,module,exports){
@@ -572,7 +597,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 /**
  * World simulation
  */
-
 var World = function () {
     /**
      * Constructor
@@ -581,7 +605,6 @@ var World = function () {
      * @param {Array} players
      * @param {Function} onEnd
      */
-
     function World(thrust, players, onEnd) {
         _classCallCheck(this, World);
 
@@ -767,7 +790,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
  * @param {Number} height
  * @param {Element} element
  */
-
 var Canvas = function () {
     function Canvas(width, height) {
         var element = arguments.length <= 2 || arguments[2] === undefined ? null : arguments[2];
@@ -787,14 +809,14 @@ var Canvas = function () {
             this.context.fillStyle = color;
         }
     }, {
+        key: 'setAlpha',
+        value: function setAlpha(alpha) {
+            this.context.globalAlpha = alpha;
+        }
+    }, {
         key: 'clear',
         value: function clear() {
             this.context.clearRect(0, 0, this.element.width, this.element.height);
-        }
-    }, {
-        key: 'clearZone',
-        value: function clearZone(x, y, width, height) {
-            this.context.clearRect(x, y, width, height);
         }
     }, {
         key: 'color',
@@ -851,6 +873,15 @@ var Canvas = function () {
         value: function toString() {
             return this.element.toDataURL();
         }
+    }, {
+        key: 'toImage',
+        value: function toImage() {
+            var image = new Image();
+
+            image.src = this.toString();
+
+            return image;
+        }
 
         /**
          * Debug canvas content
@@ -863,14 +894,10 @@ var Canvas = function () {
         value: function debug() {
             var image = arguments.length <= 0 || arguments[0] === undefined ? false : arguments[0];
 
-            var data = this.toString();
-
             if (image) {
-                var _image = new Image();
-                _image.src = data;
-                document.body.appendChild(_image);
+                document.body.appendChild(this.toImage());
             } else {
-                console.info(data);
+                console.info(this.toString());
             }
         }
     }]);
@@ -898,7 +925,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
  *
  * @author alteredq / http://alteredqualia.com/
  */
-
 var Clock = function () {
     function Clock(autoStart) {
         _classCallCheck(this, Clock);
@@ -1124,8 +1150,10 @@ var Avatar = function () {
         _classCallCheck(this, Avatar);
 
         this.player = player;
-        this.idle = Avatar.createLozange('#FFFD1B', '#BCBB14', direction, 0.5, 0.75, 0.25);
-        this.thrust = Avatar.createLozange('#F5DF0E', '#AB9B0A', direction, 0.25, 1, 0.25);
+        this.idle = Avatar.createLozange('#FFFD1B', '#BCBB14', 1, direction, 0.5, 0.75, 0.25);
+        this.idleShadow = Avatar.createLozange('#000000', '#000000', 0.1, direction, 0.5, 0.75, 0.25);
+        this.thrust = Avatar.createLozange('#F5DF0E', '#AB9B0A', 1, direction, 0.25, 1, 0.25);
+        this.thrustShadow = Avatar.createLozange('#000000', '#000000', 0.1, direction, 0.25, 1, 0.25);
         this.shake = 0;
         this.shakeTimout = null;
 
@@ -1156,7 +1184,7 @@ var Avatar = function () {
 
             var time = (Date.now() - this.shake) / Avatar.shakeTime * 4 * Math.PI;
 
-            return Math.cos(time) * Avatar.radius / 50;
+            return Math.cos(time) * Avatar.radius / 25;
         }
     }, {
         key: 'draw',
@@ -1164,9 +1192,21 @@ var Avatar = function () {
             return this.player.thrusting ? this.thrust.element : this.idle.element;
         }
     }, {
+        key: 'drawShadow',
+        value: function drawShadow() {
+            return this.player.thrusting ? this.thrustShadow.element : this.idleShadow.element;
+        }
+    }, {
         key: 'getSize',
         value: function getSize() {
-            return Avatar.radius * this.player.getSpeedRatio();
+            var ratio = 1 + (this.player.getSpeedRatio() - 1) * 0.5;
+
+            return Avatar.radius / devicePixelRatio * ratio;
+        }
+    }, {
+        key: 'getDropShadow',
+        value: function getDropShadow() {
+            return Avatar.radius * 0.1;
         }
     }], [{
         key: 'createFrames',
@@ -1179,11 +1219,11 @@ var Avatar = function () {
         }
     }, {
         key: 'createLozange',
-        value: function createLozange(color, colorDark, direction, height, body, head) {
+        value: function createLozange(color, colorDark, alpha, direction, height, body, head) {
             var canvasWidth = 2;
             var canvasHeight = 2;
 
-            var size = Avatar.radius * 1;
+            var size = Avatar.radius * 2;
             var canvas = new _Canvas2.default(size * canvasWidth, size * canvasHeight);
             var context = canvas.context;
 
@@ -1199,6 +1239,7 @@ var Avatar = function () {
             }
 
             context.scale(size, size);
+            canvas.setAlpha(alpha);
 
             canvas.setFill(color);
             context.beginPath();
@@ -1225,7 +1266,7 @@ var Avatar = function () {
     return Avatar;
 }();
 
-Avatar.radius = 200;
+Avatar.radius = 360;
 Avatar.shakeTime = 300;
 exports.default = Avatar;
 
@@ -1260,13 +1301,18 @@ var BottomCamera = function (_Camera) {
 
         _this.centerX = canvas.element.width / 4;
         _this.centerY = canvas.element.height * 3 / 4;
+
+        var margin = _this.centerX / _this.scale;
+
+        _this.marginLeft = -Math.floor(margin);
+        _this.marginRight = Math.floor(margin * 3);
         return _this;
     }
 
     _createClass(BottomCamera, [{
         key: 'translate',
         value: function translate(x) {
-            return Math.round(this.centerX + (x - this.player.position) * this.scale);
+            return this.centerX + (x - this.player.position) * this.scale;
         }
     }, {
         key: 'getViewPort',
@@ -1274,8 +1320,8 @@ var BottomCamera = function (_Camera) {
             var margin = this.centerX / this.scale;
 
             return {
-                start: this.player.position - Math.floor(margin),
-                end: this.player.position + Math.floor(margin * 3)
+                start: this.player.position + this.marginLeft,
+                end: this.player.position + this.marginRight
             };
         }
     }]);
@@ -1306,12 +1352,13 @@ var Camera = function () {
     function Camera(canvas, map, player, scale, y) {
         _classCallCheck(this, Camera);
 
-        this.y = y;
+        this.y = Math.ceil(y);
         this.scale = scale;
         this.map = map;
         this.canvas = canvas;
         this.player = player;
         this.avatar = new _Avatar2.default(player, y === 0);
+        this.halfHeight = Math.round(this.canvas.element.height / 2);
     }
 
     _createClass(Camera, [{
@@ -1320,16 +1367,29 @@ var Camera = function () {
             var alterEgo = arguments.length <= 0 || arguments[0] === undefined ? null : arguments[0];
             var difference = arguments.length <= 1 || arguments[1] === undefined ? 0 : arguments[1];
 
-            var size = this.avatar.getSize();
+            var size = Math.round(this.avatar.getSize());
             var x = Math.round(this.centerX - size / 2);
             var y = Math.round(this.centerY - size / 2);
-            var shake = this.avatar.getShake();
+            var sun = this.getSunDirection();
+            var shadow = Math.round(sun * this.avatar.getDropShadow());
+            var shake = Math.round(this.avatar.getShake());
 
             var _getViewPort = this.getViewPort();
 
             var start = _getViewPort.start;
             var end = _getViewPort.end;
 
+            var aesize = void 0,
+                aex = void 0,
+                aey = void 0,
+                aeshadow = void 0;
+
+            if (alterEgo) {
+                aesize = Math.round(alterEgo.getSize());
+                aex = Math.round(this.getAlterEgoPosition(x, difference));
+                aey = Math.round(this.centerY - aesize / 2);
+                aeshadow = Math.round(sun * alterEgo.getDropShadow());
+            }
 
             for (var i = this.map.corridor.rooms.length - 1; i >= 0; i--) {
                 var room = this.map.corridor.rooms[i];
@@ -1338,13 +1398,16 @@ var Camera = function () {
                 }
             }
 
-            this.canvas.drawImage(this.avatar.draw(), x, y + shake, size, size);
+            this.canvas.drawImage(this.avatar.drawShadow(), x + shake, y + shadow, size, size);
 
             if (alterEgo) {
-                var aesize = alterEgo.getSize();
-                var aex = this.getAlterEgoPosition(x, difference);
-                var aey = Math.round(this.centerY - aesize / 2);
-                this.canvas.drawImage(alterEgo.draw(), aex, aey, aesize, aesize);
+                this.canvas.drawImage(alterEgo.drawShadow(), aex + shake, aey + aeshadow, aesize, aesize);
+            }
+
+            this.canvas.drawImage(this.avatar.draw(), x + shake, y, size, size);
+
+            if (alterEgo) {
+                this.canvas.drawImage(alterEgo.draw(), aex + shake, aey, aesize, aesize);
             }
         }
     }, {
@@ -1355,12 +1418,21 @@ var Camera = function () {
     }, {
         key: 'drawRoom',
         value: function drawRoom(room) {
-            this.canvas.drawImage(this.getView(room), this.translate(room.start), this.y, room.view.element.width, this.canvas.element.height / 2);
+            if (!room.scaledSize) {
+                room.scaledSize = Math.ceil(room.size * this.scale);
+            }
+
+            this.canvas.drawImage(this.getView(room), Math.round(this.translate(room.start)), this.y, room.scaledSize, this.halfHeight);
         }
     }, {
         key: 'getView',
         value: function getView(room) {
-            return room.view.element;
+            return room.view;
+        }
+    }, {
+        key: 'getSunDirection',
+        value: function getSunDirection() {
+            return 1;
         }
     }]);
 
@@ -1382,11 +1454,13 @@ var _Canvas = require('../tool/Canvas.js');
 
 var _Canvas2 = _interopRequireDefault(_Canvas);
 
+var _Room = require('../engine/Room.js');
+
+var _Room2 = _interopRequireDefault(_Room);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var baseWallSize = 30;
 
 var Map = function () {
     function Map(corridor, distance, scale, height) {
@@ -1401,43 +1475,69 @@ var Map = function () {
         }
     }
 
-    /**
-     * Draw a room into the map
-     *
-     * @param {Room} room
-     */
-
-
     _createClass(Map, [{
         key: 'drawRoom',
         value: function drawRoom(room) {
-            var width = Math.ceil(room.size * this.scale);
+            var color = room.color;
+            var wallColor = room.wallColor;
+            var size = room.size;
 
-            room.view = new _Canvas2.default(width, 1);
-            room.mirror = new _Canvas2.default(width, 1);
+            var id = '' + color; //:${size}
+
+            if (typeof Map.cache[id] === 'undefined') {
+                Map.cache[id] = this.getColor(size, color, wallColor);
+            }
+
+            var _Map$cache$id = Map.cache[id];
+            var view = _Map$cache$id.view;
+            var mirror = _Map$cache$id.mirror;
+
+
+            room.view = view;
+            room.mirror = mirror;
+        }
+
+        /**
+         * Draw a room into the map
+         *
+         * @param {Room} room
+         */
+
+    }, {
+        key: 'getColor',
+        value: function getColor(size, color, wallColor) {
+            var width = Math.ceil(size * this.scale);
+            var view = new _Canvas2.default(width, 1);
+            var mirror = new _Canvas2.default(width, 1);
 
             // Draw the room;
-            room.view.setFill(room.color);
-            room.view.drawRect(0, 0, room.view.element.width, room.view.element.height);
+            view.setFill(color);
+            view.drawRect(0, 0, view.element.width, view.element.height);
 
             // Draw the wall
-            var wallSize = Math.ceil(baseWallSize * this.scale);
-            room.view.setFill(room.wallColor);
-            room.view.drawRect(0, 0, wallSize, room.view.element.height);
+            var wallSize = Math.ceil(size * _Room2.default.wallSize * this.scale);
+            view.setFill(wallColor);
+            view.drawRect(0, 0, wallSize, view.element.height);
 
             // Draw the reverse view for top lane
-            room.mirror.reverse();
-            room.mirror.drawImageTo(room.view.element, 0, 0);
-            room.mirror.reverse();
+            mirror.reverse();
+            mirror.drawImageTo(view.element, 0, 0);
+            mirror.reverse();
+
+            return {
+                view: view.element,
+                mirror: mirror.element
+            };
         }
     }]);
 
     return Map;
 }();
 
+Map.cache = {};
 exports.default = Map;
 
-},{"../tool/Canvas.js":11}],20:[function(require,module,exports){
+},{"../engine/Room.js":5,"../tool/Canvas.js":11}],20:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -1457,7 +1557,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 /**
  * Minimap view
  */
-
 var Minimap = function () {
 
   /**
@@ -1468,7 +1567,6 @@ var Minimap = function () {
    * @param {Number} scale
    * @param {Number} stage
    */
-
   function Minimap(distance, width, height, stage) {
     _classCallCheck(this, Minimap);
 
@@ -1511,14 +1609,14 @@ var Minimap = function () {
       var x = (ltr ? position : this.distance - position) * this.scale - width / 2;
       var color = ltr ? 0xFF00000 : 0x00FF00;
 
-      canvas.drawImage(avatar.draw(), x, this.halfHeight, width, width);
+      canvas.drawImage(avatar.draw(), Math.round(x), this.halfHeight, width, width);
     }
   }]);
 
   return Minimap;
 }();
 
-Minimap.radius = 20;
+Minimap.radius = 50;
 exports.default = Minimap;
 
 },{"../tool/Canvas.js":11}],21:[function(require,module,exports){
@@ -1622,17 +1720,17 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var Renderer = function () {
+
     /**
      * Constructor
      *
      * @param {World} world
      */
-
     function Renderer(world) {
         _classCallCheck(this, Renderer);
 
-        var width = window.innerWidth * devicePixelRatio;
-        var height = window.innerHeight * devicePixelRatio;
+        var width = window.innerWidth /* * devicePixelRatio*/;
+        var height = window.innerHeight /* * devicePixelRatio*/;
 
         this.world = world;
         this.canvas = new _Canvas2.default(width, height, document.getElementById('canvas'));
@@ -1653,7 +1751,7 @@ var Renderer = function () {
             delete this.minimap;
             delete this.cameras;
 
-            this.fov = distance / 20;
+            this.fov = Math.round(distance / Renderer.fov);
             this.scale = width / this.fov;
             this.map = new _Map2.default(this.world.rooms, distance, this.scale, halfHeight);
             this.minimap = new _Minimap2.default(distance, width, height);
@@ -1682,6 +1780,7 @@ var Renderer = function () {
     return Renderer;
 }();
 
+Renderer.fov = 60;
 exports.default = Renderer;
 
 },{"../engine/Player.js":3,"../tool/Canvas.js":11,"./BottomCamera.js":17,"./Map.js":19,"./Minimap.js":20,"./TopCamera.js":24}],23:[function(require,module,exports){
@@ -1720,6 +1819,7 @@ var Title = function () {
         this.toggleState = this.toggleState.bind(this);
         this.onKeyDown = this.onKeyDown.bind(this);
         this.startCountdown = this.startCountdown.bind(this);
+        this.offerReset = this.offerReset.bind(this);
         this.reset = this.reset.bind(this);
 
         this.thrust = thrust;
@@ -1800,10 +1900,15 @@ var Title = function () {
                     break;
                 case 'gameover':
                     this.overlays.gameover.style.display = 'flex';
-                    window.addEventListener('keydown', this.reset);
-                    window.addEventListener('touchstart', this.reset);
+                    setTimeout(this.offerReset, 1000);
                     break;
             }
+        }
+    }, {
+        key: 'offerReset',
+        value: function offerReset() {
+            window.addEventListener('keydown', this.reset);
+            window.addEventListener('touchstart', this.reset);
         }
     }, {
         key: 'toggleState',
@@ -1855,8 +1960,12 @@ var TopCamera = function (_Camera) {
 
         var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(TopCamera).call(this, canvas, map, player, scale, y));
 
+        var margin = _this.canvas.element.width / 4 / _this.scale;
+
         _this.centerX = canvas.element.width * 3 / 4;
         _this.centerY = canvas.element.height / 4;
+        _this.marginLeft = -Math.floor(3 * margin);
+        _this.marginRight = Math.floor(margin);
         return _this;
     }
 
@@ -1865,17 +1974,16 @@ var TopCamera = function (_Camera) {
         value: function translate(x) {
             var position = this.map.corridor.distance - this.player.position;
 
-            return Math.round(this.centerX + (x - position) * this.scale);
+            return this.centerX + (x - position) * this.scale;
         }
     }, {
         key: 'getViewPort',
         value: function getViewPort() {
-            var margin = this.canvas.element.width / 4 / this.scale;
             var position = this.map.corridor.distance - this.player.position;
 
             return {
-                start: position - Math.floor(margin * 3),
-                end: position + Math.floor(margin)
+                start: position + this.marginLeft,
+                end: position + this.marginRight
             };
         }
     }, {
@@ -1886,7 +1994,12 @@ var TopCamera = function (_Camera) {
     }, {
         key: 'getView',
         value: function getView(room) {
-            return room.mirror.element;
+            return room.mirror;
+        }
+    }, {
+        key: 'getSunDirection',
+        value: function getSunDirection() {
+            return -1;
         }
     }]);
 
