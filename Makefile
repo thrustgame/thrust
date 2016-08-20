@@ -7,7 +7,7 @@ build:
 
 ## Publish
 deploy@prod:
-	rsync -arzv --delete index.html css dist ost dédié:/home/tom32i/thrust
+	rsync -arzv --delete index.html css dist ost tom32i@tom32i.fr:/home/tom32i/thrust
 
 ## Publish
 deploy@demo:
