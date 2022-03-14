@@ -1,3 +1,5 @@
-import Thrust from './Thrust.js';
+import Thrust from '@app/Thrust.js';
+import '@assets/css/normalize.css';
+import '@assets/css/main.css';
 
 new Thrust();

@@ -1,3 +1,5 @@
+import title from '@assets/ost/title.ogg';
+
 class AudioPlayer {
     constructor() {
         window.AudioContext = window.AudioContext || window.webkitAudioContext;
@@ -20,7 +22,8 @@ class AudioPlayer {
 
     load(done) {
         let request = new XMLHttpRequest();
-        request.open('GET', 'ost/title.ogg');
+
+        request.open('GET', title);
         request.responseType = 'arraybuffer';
 
         request.onload = function() {
@@ -37,7 +40,13 @@ class AudioPlayer {
         this.audioSource = this.audioContext.createBufferSource();
         this.audioSource.buffer = this.ostBuffer;
         this.audioSource.connect(this.audioContext.destination);
-        this.audioSource.start(0);
+
+        try {
+            this.audioSource.start(0);
+        } catch (error) {
+            window.addEventListener('keydown', this.play, { once: true });
+            window.addEventListener('touchstart', this.play, { once: true });
+        }
 
         this.audioPlaying = true;
     }

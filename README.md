@@ -18,15 +18,17 @@ OST: [Jumper by Killo-Gram](https://www.jamendo.com/track/1350213/jumper)
 
 Install dependencies
 
-    npm install
+    make install
 
 Build the project
 
-    gulp build
+    make build
 
 ## Usage
 
-Open `index.html` or serve the root directory over HTTP.
+    make start
+
+Open http://localhost:8000
 
 ## License
 

@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Bungee+Hairline&family=Bungee+Shade&display=swap');
+
 .blink {
   animation: blinker 1s linear infinite;
 }
